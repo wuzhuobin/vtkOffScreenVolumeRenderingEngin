@@ -20,32 +20,39 @@ vtk_volume_viewer_json_interpreter::~vtk_volume_viewer_json_interpreter()
 {
 }
 
-void vtk_volume_viewer_json_interpreter::read_json(std::istream &in)
-{
-  boost::property_tree::read_json(in, this->content);
-}
-
 void vtk_volume_viewer_json_interpreter::read_json(const std::string &content)
 {
-//   boost::property_tree::read_json(content, this->content);
-  stringstream ss;
-  ss << content;
-  boost::property_tree::read_json(ss, this->content);
+  try
+  {
+    stringstream ss;
+    ss << content;
+    boost::property_tree::read_json(ss, this->content);
+  }
+  catch (json_parser::json_parser_error &e)
+  {
+    cerr << e.what() << '\n';
+    cerr << "Cannot parse this json.\n";
+  }
 }
 
 void vtk_volume_viewer_json_interpreter::read_json_file(const std::string &filename)
 {
-  boost::property_tree::read_json(filename, this->content);
+  try
+  {
+    boost::property_tree::read_json(filename, this->content);
+  }
+  catch(json_parser::json_parser_error &e)
+  {
+    cerr << e.what() << '\n';
+    cerr << "Cannot parse this json.\n";
+  }
 }
 
-void vtk_volume_viewer_json_interpreter::write_json(std::ostream &out)
+void vtk_volume_viewer_json_interpreter::write_json(std::string &content)
 {
-
-}
-
-void vtk_volume_viewer_json_interpreter::write_json(const std::string &content)
-{
-//   boost::property_tree::write_json(filename, this->content);
+  stringstream ss;
+  boost::property_tree::write_json(ss, this->content);
+  content = ss.str();
 }
 
 void vtk_volume_viewer_json_interpreter::write_json_file(const std::string &filename)
@@ -113,6 +120,57 @@ void vtk_volume_viewer_json_interpreter::dolly(vtkRenderer *renderer) const
     renderer->ResetCameraClippingRange();
   }
   renderer->UpdateLightsGeometryToFollowCamera();
+}
+
+void vtk_volume_viewer_json_interpreter::vtk_volume_viewer_json_interpreter::pan(vtkRenderer *renderer)
+{
+  array<double, 2> current;
+  array<double, 2> last;
+  double motion_factor;
+  this->get_values("pan.current", current);
+  this->get_values("pan.last", last);
+  this->get_value("pan.motionFactor", motion_factor); 
+  // // Calculate the focal depth since we'll be using it a lot
+  // vtkCamera *camera = renderer->GetActiveCamera();
+  // double view_focus[4]{1,1,1,1};
+  // camera->GetFocalPoint(view_focus);
+  // renderer->SetWorldPoint(view_focus);
+  // renderer->WorldToDisplay();
+  // double focal_depth = view_focus[2];
+  // this->ComputeWorldToDisplay(viewFocus[0], viewFocus[1], viewFocus[2],
+  //                             viewFocus);
+  // focalDepth = viewFocus[2];
+
+  // this->ComputeDisplayToWorld(rwi->GetEventPosition()[0],
+  //                             rwi->GetEventPosition()[1],
+  //                             focalDepth,
+  //                             newPickPoint);
+
+  // // Has to recalc old mouse point since the viewport has moved,
+  // // so can't move it outside the loop
+
+  // this->ComputeDisplayToWorld(rwi->GetLastEventPosition()[0],
+  //                             rwi->GetLastEventPosition()[1],
+  //                             focalDepth,
+  //                             oldPickPoint);
+
+  // // Camera motion is reversed
+
+  // motionVector[0] = oldPickPoint[0] - newPickPoint[0];
+  // motionVector[1] = oldPickPoint[1] - newPickPoint[1];
+  // motionVector[2] = oldPickPoint[2] - newPickPoint[2];
+
+  // camera->GetFocalPoint(viewFocus);
+  // camera->GetPosition(viewPoint);
+  // camera->SetFocalPoint(motionVector[0] + viewFocus[0],
+  //                       motionVector[1] + viewFocus[1],
+  //                       motionVector[2] + viewFocus[2]);
+
+  // camera->SetPosition(motionVector[0] + viewPoint[0],
+  //                     motionVector[1] + viewPoint[1],
+  //                     motionVector[2] + viewPoint[2]);
+
+  // renderer->UpdateLightsGeometryToFollowCamera();
 }
 
 template<typename T>

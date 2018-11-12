@@ -34,11 +34,14 @@ int main(int argc, char *argv[])
   pngWriter->SetInputConnection(windowToImageFilter->GetOutputPort());
   pngWriter->SetWriteToMemory(true);
   ofstream fout;
-  vtk_volume_viewer_json_interpreter interpreter;
+  vtk_volume_viewer_json_interpreter interpreter(true);
   cout << "START!\n";
   while(cin.get())
   {
     interpreter.read_json_file("../../../example.json");
+    std::string aa;
+    interpreter.write_json(aa);
+    cerr << aa;
     interpreter.interpret(volumeViewer);
     volumeViewer->Render();
     windowToImageFilter->Modified();

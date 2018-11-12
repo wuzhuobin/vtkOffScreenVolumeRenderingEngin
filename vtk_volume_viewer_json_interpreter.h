@@ -12,13 +12,11 @@ class vtkRenderer;
 class vtk_volume_viewer_json_interpreter final
 {
 public:
-  vtk_volume_viewer_json_interpreter(bool debug = true);
+  vtk_volume_viewer_json_interpreter(bool debug = false);
   ~vtk_volume_viewer_json_interpreter();
-  void read_json(std::istream &in);
   void read_json(const std::string &content);
   void read_json_file(const std::string &filename);
-  void write_json(std::ostream &out);
-  void write_json(const std::string &content);
+  void write_json(std::string &content);
   void write_json_file(const std::string &filename);
   /**
    * @brief Function for interpreter and bridge. 
@@ -28,6 +26,7 @@ public:
   void interpret(vtkRenderer *renderer) const;
 private:
   void dolly(vtkRenderer *renderer) const;
+  void pan(vtkRenderer *renderer) const;
   template<typename T>
   bool get_value(const std::string &key, T &value) const;
   template<typename T, std::size_t N>

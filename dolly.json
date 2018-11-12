@@ -1,8 +1,5 @@
 {
-  "preset": 1,
-  "shift": 100,
-  "opacity": 1,
-  "pan":
+  "dolly":
   {
     "last": [10, 10],
     "current": [10, 100],
