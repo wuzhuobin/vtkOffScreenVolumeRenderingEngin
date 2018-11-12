@@ -1,0 +1,13 @@
+{
+  "preset": 20,
+  "shift": 100,
+  "dolly":
+  {
+    "last":
+    [10, 10],
+    "current":
+    [10, 10],
+    "motionFactor":
+    [10]
+  }
+}
