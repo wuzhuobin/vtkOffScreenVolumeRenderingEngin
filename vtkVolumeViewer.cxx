@@ -124,7 +124,8 @@ void vtkVolumeViewer::SetInputConnection(vtkAlgorithmOutput * input)
 
 void vtkVolumeViewer::SetPreset(int preset)
 {
-    this->Preset = preset;
+    this->Preset = (preset > 26 ? 26 : preset);
+    this->Preset = (preset < 0 ? 0 : preset);
     set_volume_property(this->Volume, this->Preset, this->Shift, this->Opacity);
 }
 

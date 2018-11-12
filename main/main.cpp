@@ -5,8 +5,10 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkPNGWriter.h>
+#include <vtkCamera.h>
 // std 
 #include <string>
+#include <set>
 template<typename T>
 using Ptr = vtkSmartPointer<T>;
 int main(int argc, char* argv[])
@@ -19,23 +21,44 @@ int main(int argc, char* argv[])
   volumeViewer->SetInputConnection(niftiImageReader->GetOutputPort());
   volumeViewer->SetupInteractor(interactor);
   volumeViewer->SetPreset(vtkVolumeViewer::MR_DEFAULT);
-//   volumeViewer->OffScreenRenderingOn();
-  std::string in;
-  while(std::cin >> in)
-  {
-    std::cout << in << '\n';
-  }
   volumeViewer->Render();
-//   interactor->Start();
   auto windowToImageFilter = Ptr<vtkWindowToImageFilter>::New();
   windowToImageFilter->SetInput(volumeViewer->GetRenderWindow());
-  windowToImageFilter->Update();
-
   auto pngWriter = Ptr<vtkPNGWriter>::New();
   pngWriter->SetInputConnection(windowToImageFilter->GetOutputPort());
   pngWriter->SetFileName("png.png");
-  pngWriter->Write();
-
-//   cin.get();
+//   volumeViewer->OffScreenRenderingOn();
+  std::string in;
+  std::set<std::string> options{"preset", "shift", "opacity", "dolly", "roll", "azimuth", "yaw", "elevation", "pitch"};
+  auto type = options.cend();
+  while(std::cin >> in)
+  {
+    auto cit = options.find(in);
+    if(cit != options.cend()){
+        type = cit; 
+        continue;
+    }
+    else if(type != options.end()){
+        if(*type == "preset")
+        {
+          int preset = std::stoi(in);
+          volumeViewer->SetPreset(preset);
+        }
+        else if(*type == "shift")
+        {
+          double shift = std::stod(in);
+          volumeViewer->SetShift(shift);
+        }
+        else if(*type == "opacity")
+        {
+          double opacity = std::stod(in);
+          volumeViewer->SetOpacity(opacity);
+        }
+        volumeViewer->Render();
+        windowToImageFilter->Modified();
+        windowToImageFilter->Update();
+        pngWriter->Write();
+    }
+  }
   return EXIT_SUCCESS;
 }
