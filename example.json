@@ -1,13 +1,13 @@
 {
   "preset": 20,
   "shift": 100,
+  "opacity": 1,
   "dolly":
   {
     "last":
     [10, 10],
     "current":
-    [10, 10],
-    "motionFactor":
-    [10]
+    [10, 0],
+    "motionFactor": 1
   }
 }
