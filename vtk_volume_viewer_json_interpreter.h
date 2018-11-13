@@ -27,6 +27,7 @@ public:
 private:
   void dolly(vtkRenderer *renderer) const;
   void pan(vtkRenderer *renderer) const;
+  void spin(vtkRenderer *renderer) const;
   template<typename T>
   bool get_value(const std::string &key, T &value) const;
   template<typename T, std::size_t N>

@@ -82,8 +82,12 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkVolumeViewer *viewer) cons
   {
       viewer->SetOpacity(opacity);
   }
+  array<int, 2> size;
+  if(this->get_values("size", size)){
+    viewer->SetSize(reinterpret_cast<int*>(&size));
+  }
   this->interpret(viewer->GetRenderer());
-  
+
 }
 
 void vtk_volume_viewer_json_interpreter::interpret(vtkRenderer *renderer) const 
@@ -95,6 +99,7 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkRenderer *renderer) const
   }
   this->dolly(renderer);
   this->pan(renderer);
+  this->spin(renderer);
 }
 
 void vtk_volume_viewer_json_interpreter::dolly(vtkRenderer *renderer) const
@@ -162,15 +167,70 @@ void vtk_volume_viewer_json_interpreter::pan(vtkRenderer *renderer) const
   double view_point[3];
   camera->GetFocalPoint(view_focus);
   camera->GetPosition(view_point);
-  cerr << "view_focus: " << view_focus[0] << ' ' << view_focus[1] << ' ' << view_focus[2] << '\n';
-  cerr << "view_point: " << view_point[0] << ' ' << view_point[1] << ' ' << view_point[2] << '\n';
   vtkMath::Add(view_focus, motion_vector, view_focus);
   vtkMath::Add(view_point, motion_vector, view_point);
-  cerr << "view_focus: " << view_focus[0] << ' ' << view_focus[1] << ' ' << view_focus[2] << '\n';
-  cerr << "view_point: " << view_point[0] << ' ' << view_point[1] << ' ' << view_point[2] << '\n';
   camera->SetFocalPoint(view_focus);
   camera->SetPosition(view_point);
   renderer->UpdateLightsGeometryToFollowCamera();
+}
+
+void vtk_volume_viewer_json_interpreter::spin(vtkRenderer *renderer) const
+{
+  array<double, 2> current;
+  array<double, 2> last;
+  if (!this->get_values<double, 2>("spin.current", current))
+  {
+    return;
+  }
+  if (!this->get_values<double, 2>("spin.last", last))
+  {
+    return;
+  }
+
+  double *center = renderer->GetCenter();
+
+  double new_angle =
+    vtkMath::DegreesFromRadians( atan2( current[1] - center[1],
+                                        current[0] - center[0] ) );
+
+  double old_angle =
+    vtkMath::DegreesFromRadians( atan2( last[1] - center[1],
+                                        last[0] - center[0] ) );
+
+  vtkCamera *camera = renderer->GetActiveCamera();
+  camera->Roll( new_angle - old_angle );
+  camera->OrthogonalizeViewUp();
+}
+
+void vtk_volume_viewer_json_interpreter::rotate(vtkRenderer *render) const
+{
+    vtkRenderWindowInteractor *rwi = this->Interactor;
+
+  int dx = rwi->GetEventPosition()[0] - rwi->GetLastEventPosition()[0];
+  int dy = rwi->GetEventPosition()[1] - rwi->GetLastEventPosition()[1];
+
+  int *size = this->CurrentRenderer->GetRenderWindow()->GetSize();
+
+  double delta_elevation = -20.0 / size[1];
+  double delta_azimuth = -20.0 / size[0];
+
+  double rxf = dx * delta_azimuth * this->MotionFactor;
+  double ryf = dy * delta_elevation * this->MotionFactor;
+
+  vtkCamera *camera = this->CurrentRenderer->GetActiveCamera();
+  camera->Azimuth(rxf);
+  camera->Elevation(ryf);
+  camera->OrthogonalizeViewUp();
+
+  if (this->AutoAdjustCameraClippingRange)
+  {
+    this->CurrentRenderer->ResetCameraClippingRange();
+  }
+
+  if (rwi->GetLightFollowCamera())
+  {
+    this->CurrentRenderer->UpdateLightsGeometryToFollowCamera();
+  }
 }
 
 template<typename T>

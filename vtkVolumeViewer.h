@@ -90,23 +90,23 @@ public:
 
   virtual void SetOpacity(double opacity);
   vtkGetMacro(Opacity, double);
+  // //@{
+  // /**
+  //  * These are here when using a Tk window.
+  //  */
+  // virtual void SetDisplayId(void *a);
+  // virtual void SetWindowId(void *a);
+  // virtual void SetParentId(void *a);
+  // //@}
+
   //@{
   /**
-   * These are here when using a Tk window.
+   * Set/Get the position in screen coordinates of the rendering window.
    */
-//   virtual void SetDisplayId(void *a);
-//   virtual void SetWindowId(void *a);
-//   virtual void SetParentId(void *a);
-//   //@}
-
-//   //@{
-//   /**
-//    * Set/Get the position in screen coordinates of the rendering window.
-//    */
-//   virtual int* GetPosition();
-//   virtual void SetPosition(int a,int b);
-//   virtual void SetPosition(int a[2]) { this->SetPosition(a[0],a[1]); }
-//   //@}
+  virtual int* GetPosition();
+  virtual void SetPosition(int a,int b);
+  virtual void SetPosition(int a[2]) { this->SetPosition(a[0],a[1]); }
+  //@}
 
   //@{
   /**

@@ -141,6 +141,16 @@ void vtkVolumeViewer::SetOpacity(double opacity)
     set_volume_property(this->Volume, this->Preset, this->Shift, this->Opacity);
 }
 
+int *vtkVolumeViewer::GetPosition()
+{
+  return this->RenderWindow->GetPosition();
+}
+
+void vtkVolumeViewer::SetPosition(int a, int b)
+{
+  this->RenderWindow->SetPosition(a, b);
+}
+
 int * vtkVolumeViewer::GetSize()
 {
     return this->RenderWindow->GetSize();
