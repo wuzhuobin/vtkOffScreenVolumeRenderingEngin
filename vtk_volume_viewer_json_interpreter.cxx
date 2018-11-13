@@ -94,16 +94,23 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkRenderer *renderer) const
     return;
   }
   this->dolly(renderer);
+  this->pan(renderer);
 }
 
 void vtk_volume_viewer_json_interpreter::dolly(vtkRenderer *renderer) const
 {
   array<double, 2> current;
   array<double, 2> last;
-  double motion_factor;
-  this->get_values("dolly.current", current);
-  this->get_values("dolly.last", last);
+  double motion_factor = 1;
   this->get_value("dolly.motionFactor", motion_factor);
+  if(!this->get_values("dolly.current", current))
+  {
+    return;
+  }
+  if(!this->get_values("dolly.last", last))
+  {
+    return;
+  }
   // copy from vtkInteractorStyleTrackballCamera#Dolly. 
   double *center = renderer->GetCenter();
   int dy = current[1] - last[1];
@@ -122,55 +129,48 @@ void vtk_volume_viewer_json_interpreter::dolly(vtkRenderer *renderer) const
   renderer->UpdateLightsGeometryToFollowCamera();
 }
 
-void vtk_volume_viewer_json_interpreter::vtk_volume_viewer_json_interpreter::pan(vtkRenderer *renderer)
+void vtk_volume_viewer_json_interpreter::pan(vtkRenderer *renderer) const
 {
   array<double, 2> current;
   array<double, 2> last;
-  double motion_factor;
-  this->get_values("pan.current", current);
-  this->get_values("pan.last", last);
-  this->get_value("pan.motionFactor", motion_factor); 
-  // // Calculate the focal depth since we'll be using it a lot
-  // vtkCamera *camera = renderer->GetActiveCamera();
-  // double view_focus[4]{1,1,1,1};
-  // camera->GetFocalPoint(view_focus);
-  // renderer->SetWorldPoint(view_focus);
-  // renderer->WorldToDisplay();
-  // double focal_depth = view_focus[2];
-  // this->ComputeWorldToDisplay(viewFocus[0], viewFocus[1], viewFocus[2],
-  //                             viewFocus);
-  // focalDepth = viewFocus[2];
+  if (!this->get_values<double, 2>("pan.current", current))
+  {
+    return;
+  }
+  if (!this->get_values<double, 2>("pan.last", last))
+  {
+    return;
+  }
+  // Calculate the focal depth since we'll be using it a lot
+  vtkCamera *camera = renderer->GetActiveCamera();
+  double view_focus[4]{1,1,1,1};
+  camera->GetFocalPoint(view_focus);
+  renderer->SetWorldPoint(view_focus);
+  renderer->WorldToDisplay();
+  renderer->GetDisplayPoint(view_focus);
 
-  // this->ComputeDisplayToWorld(rwi->GetEventPosition()[0],
-  //                             rwi->GetEventPosition()[1],
-  //                             focalDepth,
-  //                             newPickPoint);
-
-  // // Has to recalc old mouse point since the viewport has moved,
-  // // so can't move it outside the loop
-
-  // this->ComputeDisplayToWorld(rwi->GetLastEventPosition()[0],
-  //                             rwi->GetLastEventPosition()[1],
-  //                             focalDepth,
-  //                             oldPickPoint);
-
-  // // Camera motion is reversed
-
-  // motionVector[0] = oldPickPoint[0] - newPickPoint[0];
-  // motionVector[1] = oldPickPoint[1] - newPickPoint[1];
-  // motionVector[2] = oldPickPoint[2] - newPickPoint[2];
-
-  // camera->GetFocalPoint(viewFocus);
-  // camera->GetPosition(viewPoint);
-  // camera->SetFocalPoint(motionVector[0] + viewFocus[0],
-  //                       motionVector[1] + viewFocus[1],
-  //                       motionVector[2] + viewFocus[2]);
-
-  // camera->SetPosition(motionVector[0] + viewPoint[0],
-  //                     motionVector[1] + viewPoint[1],
-  //                     motionVector[2] + viewPoint[2]);
-
-  // renderer->UpdateLightsGeometryToFollowCamera();
+  double last_world[4]{1,1,1,1};
+  renderer->SetDisplayPoint(last[0], last[1], view_focus[2]);
+  renderer->DisplayToWorld();
+  renderer->GetWorldPoint(last_world);
+  double current_world[4]{1,1,1,1};
+  renderer->SetDisplayPoint(current[0], current[1], view_focus[2]);
+  renderer->DisplayToWorld();
+  renderer->GetWorldPoint(current_world);
+  double motion_vector[3];
+  vtkMath::Subtract(last_world, current_world, motion_vector);
+  double view_point[3];
+  camera->GetFocalPoint(view_focus);
+  camera->GetPosition(view_point);
+  cerr << "view_focus: " << view_focus[0] << ' ' << view_focus[1] << ' ' << view_focus[2] << '\n';
+  cerr << "view_point: " << view_point[0] << ' ' << view_point[1] << ' ' << view_point[2] << '\n';
+  vtkMath::Add(view_focus, motion_vector, view_focus);
+  vtkMath::Add(view_point, motion_vector, view_point);
+  cerr << "view_focus: " << view_focus[0] << ' ' << view_focus[1] << ' ' << view_focus[2] << '\n';
+  cerr << "view_point: " << view_point[0] << ' ' << view_point[1] << ' ' << view_point[2] << '\n';
+  camera->SetFocalPoint(view_focus);
+  camera->SetPosition(view_point);
+  renderer->UpdateLightsGeometryToFollowCamera();
 }
 
 template<typename T>

@@ -1,11 +1,5 @@
 {
   "preset": 1,
   "shift": 100,
-  "opacity": 1,
-  "pan":
-  {
-    "last": [10, 10],
-    "current": [10, 100],
-    "motionFactor": 1
-  }
+  "opacity": 1
 }
