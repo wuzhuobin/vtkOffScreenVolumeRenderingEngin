@@ -100,6 +100,7 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkRenderer *renderer) const
   this->dolly(renderer);
   this->pan(renderer);
   this->spin(renderer);
+  this->rotate(renderer);
 }
 
 void vtk_volume_viewer_json_interpreter::dolly(vtkRenderer *renderer) const
@@ -202,35 +203,37 @@ void vtk_volume_viewer_json_interpreter::spin(vtkRenderer *renderer) const
   camera->OrthogonalizeViewUp();
 }
 
-void vtk_volume_viewer_json_interpreter::rotate(vtkRenderer *render) const
+void vtk_volume_viewer_json_interpreter::rotate(vtkRenderer *renderer) const
 {
-    vtkRenderWindowInteractor *rwi = this->Interactor;
-
-  int dx = rwi->GetEventPosition()[0] - rwi->GetLastEventPosition()[0];
-  int dy = rwi->GetEventPosition()[1] - rwi->GetLastEventPosition()[1];
-
-  int *size = this->CurrentRenderer->GetRenderWindow()->GetSize();
+  array<double, 2> current;
+  array<double, 2> last;
+  double motion_factor = 1;
+  this->get_value("rotate.motionFactor", motion_factor);
+  if (!this->get_values<double, 2>("rotate.current", current))
+  {
+    return;
+  }
+  if (!this->get_values<double, 2>("rotate.last", last))
+  {
+    return;
+  }
+  int dx = current[0] - last[0];
+  int dy = current[1] - last[1];
+  int *size = renderer->GetSize();
 
   double delta_elevation = -20.0 / size[1];
   double delta_azimuth = -20.0 / size[0];
 
-  double rxf = dx * delta_azimuth * this->MotionFactor;
-  double ryf = dy * delta_elevation * this->MotionFactor;
+  double rxf = dx * delta_azimuth * motion_factor;
+  double ryf = dy * delta_elevation * motion_factor;
 
-  vtkCamera *camera = this->CurrentRenderer->GetActiveCamera();
+  vtkCamera *camera = renderer->GetActiveCamera();
   camera->Azimuth(rxf);
   camera->Elevation(ryf);
   camera->OrthogonalizeViewUp();
 
-  if (this->AutoAdjustCameraClippingRange)
-  {
-    this->CurrentRenderer->ResetCameraClippingRange();
-  }
-
-  if (rwi->GetLightFollowCamera())
-  {
-    this->CurrentRenderer->UpdateLightsGeometryToFollowCamera();
-  }
+  renderer->ResetCameraClippingRange();
+  renderer->UpdateLightsGeometryToFollowCamera();
 }
 
 template<typename T>

@@ -1,0 +1,8 @@
+{
+  "rotate": 
+  {
+    "last": [10, 10],
+    "current": [10, 200],
+    "motionFactor": 1
+  }
+}
