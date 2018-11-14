@@ -19,7 +19,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
   auto niftiImageReader = Ptr<vtkNIFTIImageReader>::New();
-  niftiImageReader->SetFileName("C:/Users/jieji/Desktop/T2propeller&MRA/T2.nii");
+  niftiImageReader->SetFileName("../../../T2.nii");
   niftiImageReader->Update();
   auto interactor = Ptr<vtkRenderWindowInteractor>::New();
   auto volumeViewer = Ptr<vtkVolumeViewer>::New();

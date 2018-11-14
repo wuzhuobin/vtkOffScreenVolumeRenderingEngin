@@ -1,5 +1,6 @@
 #ifndef __VTK_VOLUME_VIEWER_JSON_INTERPRETER_H__
 #define __VTK_VOLUME_VIEWER_JSON_INTERPRETER_H__
+#pragma once
 // me 
 class vtkVolumeViewer;
 class vtkRenderer;
