@@ -2,7 +2,7 @@
   "rotate": 
   {
     "last": [10, 10],
-    "current": [10, 200],
+    "current": [10, 500],
     "motionFactor": 1
   }
 }
