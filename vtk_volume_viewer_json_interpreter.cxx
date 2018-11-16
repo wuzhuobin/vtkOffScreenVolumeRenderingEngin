@@ -84,7 +84,7 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkVolumeViewer *viewer) cons
   }
   array<int, 2> size;
   if(this->get_values("size", size)){
-    viewer->SetSize(reinterpret_cast<int*>(&size));
+    viewer->SetSize(size[0], size[1]);
   }
   this->interpret(viewer->GetRenderer());
 

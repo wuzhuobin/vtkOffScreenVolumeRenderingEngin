@@ -4,6 +4,7 @@
 // qt 
 #include <QTest>
 #include <QObject>
+#include <QFile>
 #include <QDebug>
 // vtk
 #include <vtkSmartPointer.h>
@@ -72,12 +73,22 @@ class Testvtk_volume_viewer_json_interpreter : public QObject
 private Q_SLOTS:
   void initTestCase()
   {
-    image = vtkSmartPointer<vtkImageData>::New();
+    this->image = vtkSmartPointer<vtkImageData>::New();
     CreateImageData(image);
   }
-  void cleanupTestCase(){}
+  void cleanupTestCase()
+  {
+   QFile(this->PRESET_SHIFT_OPACITY_SIZE).remove(); 
+   QFile(this->DOLLY).remove(); 
+   QFile(this->PAN).remove(); 
+   QFile(this->ROTATE).remove(); 
+   QFile(this->SPIN).remove();
+  }
   void init(){}
-  void cleanup(){}
+  void cleanup()
+  {
+
+  }
   void testPresetShiftOpacitySize()
   {
     // vtkSmartPointer<vtkNIFTIImageReader> niftiImageReader = 
@@ -86,16 +97,38 @@ private Q_SLOTS:
     // niftiImageReader->Update();
     std::string json = 
       "{"  
-        "\"preset\": 0,"  
-        "\"shift\": -100," 
-        "\"opacity\": 0.5," 
-        "\"size\":[500,500]" 
+        "\"preset\":0,"  
+        "\"shift\":-100," 
+        "\"opacity\":0.5," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"rotate\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "}"
       "}";
     vtkSmartPointer<vtkVolumeViewer> viewer = 
       vtkSmartPointer<vtkVolumeViewer>::New();
     viewer->SetOffScreenRendering(true);
     viewer->SetInputData(this->image);
-    vtk_volume_viewer_json_interpreter interpreter(false);
+    vtk_volume_viewer_json_interpreter interpreter(true);
     interpreter.read_json(json);
     interpreter.interpret(viewer);
     viewer->Render();
@@ -115,18 +148,38 @@ private Q_SLOTS:
   {
     std::string json = 
       "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
         "\"dolly\":"
           "{"
-            "\"last\":[10,10], "
-            "\"current\":[10,100],"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
             "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"rotate\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
           "}"
       "}";
     vtkSmartPointer<vtkVolumeViewer> viewer = 
       vtkSmartPointer<vtkVolumeViewer>::New();
     viewer->SetOffScreenRendering(true);
     viewer->SetInputData(this->image);
-    vtk_volume_viewer_json_interpreter interpreter(false);
+    vtk_volume_viewer_json_interpreter interpreter(true);
     interpreter.read_json(json);
     interpreter.interpret(viewer);
     viewer->Render();
@@ -147,17 +200,39 @@ private Q_SLOTS:
   {
     std::string json = 
       "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
         "\"pan\":"
           "{"
-            "\"last\":[10,10], "
-            "\"current\":[10,100]"
+            "\"last\":[0,0],"
+            "\"current\":[0,100]"
+          "},"
+        "\"rotate\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
           "}"
       "}";
+
     vtkSmartPointer<vtkVolumeViewer> viewer = 
       vtkSmartPointer<vtkVolumeViewer>::New();
     viewer->SetOffScreenRendering(true);
     viewer->SetInputData(this->image);
-    vtk_volume_viewer_json_interpreter interpreter(false);
+    vtk_volume_viewer_json_interpreter interpreter(true);
     interpreter.read_json(json);
     interpreter.interpret(viewer);
     viewer->Render();
@@ -177,18 +252,38 @@ private Q_SLOTS:
   {
     std::string json = 
       "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
         "\"rotate\":"
           "{"
-            "\"last\":[10,10], "
-            "\"current\":[10,500],"
+            "\"last\":[0,0],"
+            "\"current\":[0,100],"
             "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
           "}"
       "}";
     vtkSmartPointer<vtkVolumeViewer> viewer = 
       vtkSmartPointer<vtkVolumeViewer>::New();
     viewer->SetOffScreenRendering(true);
     viewer->SetInputData(this->image);
-    vtk_volume_viewer_json_interpreter interpreter(false);
+    vtk_volume_viewer_json_interpreter interpreter(true);
     interpreter.read_json(json);
     interpreter.interpret(viewer);
     viewer->Render();
@@ -208,17 +303,38 @@ private Q_SLOTS:
   {
     std::string json = 
       "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
         "\"rotate\":"
           "{"
-            "\"last\":[10,10], "
-            "\"current\":[10,200]"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,100]"
           "}"
       "}";
     vtkSmartPointer<vtkVolumeViewer> viewer = 
       vtkSmartPointer<vtkVolumeViewer>::New();
     viewer->SetOffScreenRendering(true);
     viewer->SetInputData(this->image);
-    vtk_volume_viewer_json_interpreter interpreter(false);
+    vtk_volume_viewer_json_interpreter interpreter(true);
     interpreter.read_json(json);
     interpreter.interpret(viewer);
     viewer->Render();
@@ -243,4 +359,4 @@ private:
   const QString SPIN = "spin.png";
 };
 QTEST_GUILESS_MAIN(Testvtk_volume_viewer_json_interpreter)
-#include <Testvtk_volume_viewer_json_interpreter.moc>
+#include "Testvtk_volume_viewer_json_interpreter.moc"
