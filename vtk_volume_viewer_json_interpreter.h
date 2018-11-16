@@ -2,6 +2,7 @@
 #define __VTK_VOLUME_VIEWER_JSON_INTERPRETER_H__
 #pragma once
 // me 
+#include "vtkoffscreenvolumerenderingengin_export.h"
 class vtkVolumeViewer;
 class vtkRenderer;
 //boos
@@ -10,7 +11,7 @@ class vtkRenderer;
 #include <string>
 #include <iostream>
 #include <array>
-class vtk_volume_viewer_json_interpreter final
+class VTKOFFSCREENVOLUMERENDERINGENGIN_EXPORT vtk_volume_viewer_json_interpreter final
 {
 public:
   vtk_volume_viewer_json_interpreter(bool debug = false);

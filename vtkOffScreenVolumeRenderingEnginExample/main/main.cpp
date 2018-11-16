@@ -18,8 +18,13 @@ using namespace std;
 #include "vtk_volume_viewer_json_interpreter.h"
 int main(int argc, char *argv[])
 {
+  if(argc < 3){
+    std::cerr << "Should have 2 input parameters. The first one is nifti image, the second one is json file.\n";
+    return EXIT_FAILURE;
+  }
   auto niftiImageReader = Ptr<vtkNIFTIImageReader>::New();
-  niftiImageReader->SetFileName("../../../T2.nii");
+  // niftiImageReader->SetFileName("../../../T2.nii");
+  niftiImageReader->SetFileName(argv[1]);
   niftiImageReader->Update();
   auto interactor = Ptr<vtkRenderWindowInteractor>::New();
   auto volumeViewer = Ptr<vtkVolumeViewer>::New();
@@ -38,7 +43,7 @@ int main(int argc, char *argv[])
   cout << "START!\n";
   while(cin.get())
   {
-    interpreter.read_json_file("../../../example.json");
+    interpreter.read_json_file(argv[2]);
     std::string aa;
     interpreter.write_json(aa);
     cerr << aa;

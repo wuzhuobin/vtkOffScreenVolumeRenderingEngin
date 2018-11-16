@@ -1,6 +1,8 @@
 #ifndef __VTK_OFF_SCREEN_VOLUME_RENDERING_FACADE_H__
 #define __VTK_OFF_SCREEN_VOLUME_RENDERING_FACADE_H__
+#pragma once
 // me 
+#include "vtkoffscreenvolumerenderingengin_export.h"
 class vtkVolumeViewer;
 // class vtk_volume_viewer_json_interpreter;
 class vtkImageData;
@@ -13,7 +15,7 @@ namespace boost
 #include <memory>
 #include <string>
 #include <vector>
-class vtk_off_screen_volume_rendering_facade final
+class VTKOFFSCREENVOLUMERENDERINGENGIN_EXPORT vtk_off_screen_volume_rendering_facade final
 {
 public: 
   vtk_off_screen_volume_rendering_facade(vtkImageData *imageData);

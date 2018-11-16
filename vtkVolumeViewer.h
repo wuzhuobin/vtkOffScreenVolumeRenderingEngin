@@ -1,6 +1,8 @@
 #ifndef __VTK_VOLUME_VIEWER_H__
 #define __VTK_VOLUME_VIEWER_H__
 #pragma once
+// me 
+#include "vtkoffscreenvolumerenderingengin_export.h"
 // vtk
 #include <vtkObject.h>
 class vtkAlgorithm;
@@ -12,7 +14,7 @@ class vtkInteractorObserver;
 class vtkRenderWindow;
 class vtkRenderer;
 class vtkRenderWindowInteractor;
-class vtkVolumeViewer: public vtkObject
+class VTKOFFSCREENVOLUMERENDERINGENGIN_EXPORT vtkVolumeViewer: public vtkObject
 {
 public: 
     static vtkVolumeViewer *New();
