@@ -60,7 +60,7 @@ void CreateImageData(vtkImageData* imageData)
   imageData->ShallowCopy(t->GetOutput());
 }
 
-class Testvtk_off_screen_volume_rendering_facade : public QObject
+class Testvtk_off_screen_volume_rendering_facade_benchmark : public QObject
 {
   Q_OBJECT;
 private Q_SLOTS:
@@ -78,44 +78,58 @@ private Q_SLOTS:
   void cleanup()
   {
   }
-  void testJPG()
+  void benmarkPNG_data()
   {
-    std::string json = 
+    QTest::addColumn<QString>("json");
+    QString jsonTemplate = 
       "{"  
         "\"preset\":0,"  
         "\"shift\":0," 
-        "\"opacity\":0.5," 
-        "\"size\":[5000,500]" 
+        "\"opacity\":1," 
+        "\"size\":[%1,%1]" 
       "}";
-    vtk_off_screen_volume_rendering_facade facade(this->image);
-    std::vector<unsigned char> data;
-    facade.render_jpeg(json, data);
-    std::ofstream fout(this->JPEG.toStdString(), std::ofstream::out | std::ofstream::binary);
-    // qDebug() << "size: " << data.size();
-    fout.write((const char*)(data.data()), data.size()* sizeof(char));
-    fout.close();
+    for(int size = 50; size < 10000; size+=50)
+    {
+      QTest::newRow(QString("Size: [%1,%1]: ").arg(size).toUtf8().constData()) << jsonTemplate.arg(size);
+    }
   }
-  void testPNG()
+  void benmarkPNG()
   {
-    std::string json = 
+    QFETCH(QString, json);
+    vtk_off_screen_volume_rendering_facade facade(this->image);
+    QBENCHMARK_ONCE
+    {
+      std::vector<unsigned char> data;
+      facade.render_png(json.toStdString(), data);
+    }
+  } 
+  void benmarkJPEG_data()
+  {
+    QTest::addColumn<QString>("json");
+    QString jsonTemplate = 
       "{"  
         "\"preset\":0,"  
         "\"shift\":0," 
-        "\"opacity\":0.5," 
-        "\"size\":[500,5000]" 
+        "\"opacity\":1," 
+        "\"size\":[%1,%1]" 
       "}";
-    vtk_off_screen_volume_rendering_facade facade(this->image);
-    std::vector<unsigned char> data;
-    facade.render_png(json, data);
-    std::ofstream fout(this->PNG.toStdString(), std::ofstream::out | std::ofstream::binary);
-    // qDebug() << "size: " << data.size();
-    fout.write((const char*)(data.data()), data.size()* sizeof(char));
-    fout.close();
+    for(int size = 50; size < 10000; size+=50)
+    {
+      QTest::newRow(QString("Size: [%1,%1]: ").arg(size).toUtf8().constData()) << jsonTemplate.arg(size);
+    }
   }
+  void benmarkJPEG()
+  {
+    QFETCH(QString, json);
+    vtk_off_screen_volume_rendering_facade facade(this->image);
+    QBENCHMARK_ONCE
+    {
+      std::vector<unsigned char> data;
+      facade.render_jpeg(json.toStdString(), data);
+    }
+  } 
 private:
   vtkSmartPointer<vtkImageData> image;
-  const QString PNG = "png.png";
-  const QString JPEG = "jpg.jpg";
 };
-QTEST_GUILESS_MAIN(Testvtk_off_screen_volume_rendering_facade)
-#include "Testvtk_off_screen_volume_rendering_facade.moc"
+QTEST_GUILESS_MAIN(Testvtk_off_screen_volume_rendering_facade_benchmark)
+#include "Testvtk_off_screen_volume_rendering_facade_benchmark.moc"

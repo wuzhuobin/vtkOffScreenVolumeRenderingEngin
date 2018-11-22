@@ -12,6 +12,7 @@
 #include <vtkInformation.h>
 #include <vtkVolumeProperty.h>
 #include <vtkInteractorStyleSwitch.h>
+#include <vtkCamera.h>
 static vtkSmartVolumeMapper * get_mapper(vtkVolume * &volume)
 {
     return reinterpret_cast<vtkSmartVolumeMapper*>(volume->GetMapper());
@@ -76,6 +77,9 @@ void vtkVolumeViewer::Render()
         // Initialize the size if not set yet
         if (this->Renderer)
         {
+            this->Renderer->GetActiveCamera()->SetFocalPoint(0, 0, 0);
+            this->Renderer->GetActiveCamera()->SetPosition(0, -1, 0);
+            this->Renderer->GetActiveCamera()->SetViewUp(0, 0, 1);
             set_volume_property(this->Volume, this->Preset, this->Shift, this->Opacity);
             this->Renderer->ResetCamera();
             this->Renderer->ResetCameraClippingRange();
