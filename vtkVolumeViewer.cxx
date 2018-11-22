@@ -79,7 +79,7 @@ void vtkVolumeViewer::Render()
         {
             this->Renderer->GetActiveCamera()->SetFocalPoint(0, 0, 0);
             this->Renderer->GetActiveCamera()->SetPosition(0, -1, 0);
-            this->Renderer->GetActiveCamera()->SetViewUp(0, 0, 1);
+            this->Renderer->GetActiveCamera()->SetViewUp(0, 0, -1);
             set_volume_property(this->Volume, this->Preset, this->Shift, this->Opacity);
             this->Renderer->ResetCamera();
             this->Renderer->ResetCameraClippingRange();
