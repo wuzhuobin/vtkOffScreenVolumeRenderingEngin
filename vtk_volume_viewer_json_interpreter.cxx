@@ -2,7 +2,9 @@
 #include "vtk_volume_viewer_json_interpreter.h"
 #include "vtkVolumeViewer.h"
 // vtk
+#include <vtkImageViewer2.h>
 #include <vtkRenderer.h>
+#include <vtkImageActor.h>
 #include <vtkCamera.h>
 // boost
 using namespace boost::property_tree;
@@ -59,12 +61,55 @@ void vtk_volume_viewer_json_interpreter::write_json_file(const std::string &file
 {
   boost::property_tree::write_json(filename, this->content);
 }
+void vtk_volume_viewer_json_interpreter::interpret(vtkObject *viewer) const
+{
+  vtkImageViewer2 *imageViewer2 = vtkImageViewer2::SafeDownCast(viewer);
+  vtkVolumeViewer *volumeViewer = vtkVolumeViewer::SafeDownCast(viewer);
+  if(imageViewer2)
+  {
+    this->interpret(imageViewer2);
+  }
+  if(volumeViewer)
+  {
+    this->interpret(volumeViewer);
+  }
+}
+
+void vtk_volume_viewer_json_interpreter::interpret(vtkImageViewer2 *viewer) const
+{
+  if(viewer == nullptr)
+  {
+    cerr << "image viewer2 is nullptr\n";
+    return;
+  }
+  int orientation;
+  if(this->get_value("orientation", orientation))
+  {
+    viewer->SetSliceOrientation(orientation);
+  }
+  array<double, 2> windowLevel;
+  if(this->get_values("windowLevel", windowLevel))
+  {
+    viewer->SetColorWindow(windowLevel[0]);
+    viewer->SetColorLevel(windowLevel[1]);
+  }
+  double opacity;
+  if(this->get_value("opacity", opacity))
+  {
+    viewer->GetImageActor()->SetOpacity(opacity);
+  }
+  array<int, 2> size;
+  if(this->get_values("size", size)){
+    viewer->SetSize(size[0], size[1]);
+  }
+  this->interpret(viewer->GetRenderer());
+}
 
 void vtk_volume_viewer_json_interpreter::interpret(vtkVolumeViewer *viewer) const 
 {
   if(viewer == nullptr)
   {
-      cerr << "viewer is nullptr\n" ;
+      cerr << "volume viewer is nullptr\n" ;
       return;
   }
   int preset;
@@ -80,7 +125,7 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkVolumeViewer *viewer) cons
   double opacity;
   if(this->get_value("opacity", opacity))
   {
-      viewer->SetOpacity(opacity);
+    viewer->SetOpacity(opacity);
   }
   array<int, 2> size;
   if(this->get_values("size", size)){

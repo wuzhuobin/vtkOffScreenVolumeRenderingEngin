@@ -71,8 +71,6 @@ private Q_SLOTS:
   }
   void cleanupTestCase()
   {
-    QFile(this->PNG).remove(); 
-    QFile(this->JPEG).remove();
   }
   void init(){}
   void cleanup()

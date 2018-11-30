@@ -3,7 +3,9 @@
 #pragma once
 // me 
 #include "vtkoffscreenvolumerenderingengin_export.h"
+class vtkObject;
 class vtkVolumeViewer;
+class vtkImageViewer2;
 class vtkRenderer;
 //boos
 #include <boost/property_tree/json_parser.hpp>
@@ -24,6 +26,8 @@ public:
    * @brief Function for interpreter and bridge. 
    * 
    */
+  void interpret(vtkObject *viewer) const;
+  void interpret(vtkImageViewer2 *viewer) const;
   void interpret(vtkVolumeViewer *viewer) const;
   void interpret(vtkRenderer *renderer) const;
 private:
