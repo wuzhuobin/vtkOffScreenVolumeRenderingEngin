@@ -82,6 +82,11 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkImageViewer2 *viewer) cons
     cerr << "image viewer2 is nullptr\n";
     return;
   }
+  int slice;
+  if(this->get_value("slice", slice))
+  {
+    viewer->SetSlice(slice);
+  }
   int orientation;
   if(this->get_value("orientation", orientation))
   {

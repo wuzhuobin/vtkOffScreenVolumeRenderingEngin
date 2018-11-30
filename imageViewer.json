@@ -2,5 +2,6 @@
   "orientation": 0,
   "windowLevel": [1, 0.5],
   "opacity": 1,
+  "slice": 1,
   "size": [500, 500]
 }
