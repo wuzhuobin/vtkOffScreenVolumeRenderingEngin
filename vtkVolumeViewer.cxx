@@ -62,7 +62,17 @@ vtkVolumeViewer::~vtkVolumeViewer()
 
 void vtkVolumeViewer::PrintSelf(ostream &os, vtkIndent indent)
 {
+  this->Superclass::PrintSelf(os, indent);
 
+  os << indent << "RenderWindow:\n";
+  this->RenderWindow->PrintSelf(os,indent.GetNextIndent());
+  os << indent << "Renderer:\n";
+  this->Renderer->PrintSelf(os,indent.GetNextIndent());
+  os << indent << "Volume:\n";
+  this->Volume->PrintSelf(os,indent.GetNextIndent());
+  os << indent << "Preset: " << this->Preset << endl;
+  os << indent << "Shift: " << this->Shift << endl;
+  os << indent << "Opacity: " << this->Opacity << endl;
 }
 
 const char * vtkVolumeViewer::GetWindowName()
