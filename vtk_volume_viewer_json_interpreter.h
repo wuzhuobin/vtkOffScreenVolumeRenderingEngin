@@ -46,5 +46,4 @@ private:
   boost::property_tree::ptree content;
   bool debug;
 };
-
 #endif // !__VTK_VOLUME_VIEWER_JSON_INTERPRETER_H__
