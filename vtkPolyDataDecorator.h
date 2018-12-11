@@ -15,7 +15,7 @@ class vtkPolyDataMapper;
 // me 
 #include "vtkoffscreenvolumerenderingengin_export.h" 
 
-class vtk_viewer_decorator
+class vtkPolyDataDecorator
 {
 public:
   template <typename T>

@@ -1,4 +1,4 @@
-#include <vtk_viewer_decorator.h>
+#include <vtkPolyDataDecorator.h>
 // std
 #include <iostream>
 // vtk
@@ -6,15 +6,15 @@
 #include <vtkPolyData.h>
 #include <vtkActor.h>
 #include <vtkPolyDataMapper.h>
-vtk_viewer_decorator::InternalStorage vtk_viewer_decorator::internalStorage;
-bool vtk_viewer_decorator::addPolyData(const std::string &tag, vtkPolyData *data)
+vtkPolyDataDecorator::InternalStorage vtkPolyDataDecorator::internalStorage;
+bool vtkPolyDataDecorator::addPolyData(const std::string &tag, vtkPolyData *data)
 {
   auto polyData = Ptr<vtkPolyData>::New();
   polyData->ShallowCopy(data);
   return !internalStorage.emplace(tag, polyData).second;
 }
 
-bool vtk_viewer_decorator::removePolyData(const std::string &tag)
+bool vtkPolyDataDecorator::removePolyData(const std::string &tag)
 {
   auto cit = internalStorage.find(tag);
   if(cit == internalStorage.cend())
@@ -25,7 +25,7 @@ bool vtk_viewer_decorator::removePolyData(const std::string &tag)
   return true;
 }
 
-bool vtk_viewer_decorator::addToRenderer(const std::string &tag, const std::string &id)
+bool vtkPolyDataDecorator::addToRenderer(const std::string &tag, const std::string &id)
 {
   auto cit = internalStorage.find(tag);
   if(cit == internalStorage.cend())
@@ -46,7 +46,7 @@ bool vtk_viewer_decorator::addToRenderer(const std::string &tag, const std::stri
   return true;
 }
 
-bool vtk_viewer_decorator::removeFromRenderer(const std::string &id)
+bool vtkPolyDataDecorator::removeFromRenderer(const std::string &id)
 {
   auto cit = this->repository.find(id);
   if(cit == this->repository.cend())
@@ -59,13 +59,13 @@ bool vtk_viewer_decorator::removeFromRenderer(const std::string &id)
   return true;
 }
 
-void vtk_viewer_decorator::install(vtkRenderer * renderer, vtkRenderWindow * renderWindow)
+void vtkPolyDataDecorator::install(vtkRenderer * renderer, vtkRenderWindow * renderWindow)
 {
   this->renderer = renderer;
   this->renderWindow = renderWindow;
 }
 
-void vtk_viewer_decorator::uninstall()
+void vtkPolyDataDecorator::uninstall()
 {
   this->renderer = nullptr;
   this->renderWindow = nullptr;
