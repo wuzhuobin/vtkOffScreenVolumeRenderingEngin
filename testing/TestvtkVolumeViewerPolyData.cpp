@@ -64,7 +64,8 @@ void CreateImageData(vtkImageData* imageData)
  
   imageData->ShallowCopy(t->GetOutput());
 }
-class TestvtkVolumeViewer: public QObject
+
+class TestvtkVolumeViewerPolyData : public QObject
 {
   Q_OBJECT;
 private Q_SLOTS:
@@ -76,26 +77,7 @@ private Q_SLOTS:
   {}
   void cleanup()
   {}
-  void testVolumeViewer()
-  {
-      // Ptr<vtkNIFTIImageReader> reader = 
-      //   Ptr<vtkNIFTIImageReader>::New();
-      // reader->SetFileName("T2.nii");
-      // reader->Update();
-      // image = reader->GetOutput();
-      Ptr<vtkImageData> image = Ptr<vtkImageData>::New();
-      CreateImageData(image);
-
-      Ptr<vtkVolumeViewer> viewer = 
-        Ptr<vtkVolumeViewer>::New();
-      viewer->SetInputData(image);
-      viewer->SetupInteractor(Ptr<vtkRenderWindowInteractor>::New());
-      viewer->Render();
-      viewer->GetInteractor()->Start();
-  }
-private:
-  
 };
 
-QTEST_GUILESS_MAIN(TestvtkVolumeViewer)
-#include "TestvtkVolumeViewer.moc"
+QTEST_GUILESS_MAIN(TestvtkVolumeViewerPolyData)
+#include "TestvtkVolumeViewerPolyData.moc"
