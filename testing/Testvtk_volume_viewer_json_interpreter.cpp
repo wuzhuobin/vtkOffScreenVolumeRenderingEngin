@@ -1,6 +1,7 @@
 // me 
 #include "vtk_volume_viewer_json_interpreter.h"
 #include "vtkVolumeViewer.h"
+#include "vtkVolumeViewerPolyData.h"
 // qt 
 #include <QTest>
 #include <QObject>
@@ -23,6 +24,8 @@
 #include <vtkUnsignedCharArray.h>
 #include <vtkPNGWriter.h>
 #include <vtkNIFTIImageReader.h>
+#include <vtkConeSource.h>
+#include <vtkPolyData.h>
 // std 
 #include <string>
 #include <fstream>
@@ -83,6 +86,7 @@ private Q_SLOTS:
    QFile(this->PAN).remove(); 
    QFile(this->ROTATE).remove(); 
    QFile(this->SPIN).remove();
+   QFile(this->POLY_DATA).remove();
   }
   void init(){}
   void cleanup()
@@ -350,6 +354,192 @@ private Q_SLOTS:
     fout.write(static_cast<const char*>(result->GetVoidPointer(0)), result->GetNumberOfValues() * sizeof(char));
     fout.close();
   }
+  
+  void testPolyData()
+  {
+    vtkSmartPointer<vtkConeSource> coneSource =
+      vtkSmartPointer<vtkConeSource>::New();
+    coneSource->SetRadius(0.1);
+    coneSource->Update();
+    vtkPolyDataDecorator::AddToInternalStorage("tag", coneSource->GetOutput());
+    std::string json = 
+      "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"rotate\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"polyData\":"
+        "{"
+          "\"tag\": \"tag\","
+          "\"id\": \"id\","
+          "\"existence\": true,"
+          "\"translation\": [0, 0, 0],"
+          "\"rotation\": [0, 0, 0]"
+        "}"
+      "}";
+    std::string json2 = 
+      "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"rotate\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"polyData\":"
+        "{"
+          "\"tag\": \"tag\","
+          "\"id\": \"id2\","
+          "\"existence\": true,"
+          "\"translation\": [1, 1, 1],"
+          "\"rotation\": [180, 180, 0]"
+        "}"
+      "}";
+    std::string json3 = 
+      "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"rotate\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"polyData\":"
+        "{"
+          "\"tag\": \"tag\","
+          "\"id\": \"id3\","
+          "\"existence\": true,"
+          "\"translation\": [1, 1, 1],"
+          "\"rotation\": [180, 180, 0]"
+        "}"
+      "}";
+    std::string json4 = 
+      "{"  
+        "\"preset\":0,"  
+        "\"shift\":0," 
+        "\"opacity\":1," 
+        "\"size\":[500,500]," 
+        "\"dolly\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"pan\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"rotate\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0],"
+            "\"motionFactor\":1"
+          "},"
+        "\"spin\":"
+          "{"
+            "\"last\":[0,0],"
+            "\"current\":[0,0]"
+          "},"
+        "\"polyData\":"
+        "{"
+          "\"tag\": \"tag\","
+          "\"id\": \"id3\","
+          "\"existence\": false,"
+          "\"translation\": [1, 1, 1],"
+          "\"rotation\": [180, 180, 0]"
+        "}"
+      "}";
+    vtkSmartPointer<vtkVolumeViewerPolyData> viewer = 
+      vtkSmartPointer<vtkVolumeViewerPolyData>::New();
+    viewer->SetOffScreenRendering(true);
+    viewer->SetInputData(this->image);
+    vtk_volume_viewer_json_interpreter interpreter(true);
+    interpreter.read_json(json);
+    interpreter.interpret(static_cast<vtkVolumeViewer*>(viewer));
+    interpreter.interpret(static_cast<vtkPolyDataDecorator*>(viewer));
+    interpreter.read_json(json2);
+    interpreter.interpret(static_cast<vtkVolumeViewer*>(viewer));
+    interpreter.interpret(static_cast<vtkPolyDataDecorator*>(viewer));
+    interpreter.read_json(json3);
+    interpreter.interpret(static_cast<vtkVolumeViewer*>(viewer));
+    interpreter.interpret(static_cast<vtkPolyDataDecorator*>(viewer));
+    interpreter.read_json(json4);
+    interpreter.interpret(static_cast<vtkVolumeViewer*>(viewer));
+    interpreter.interpret(static_cast<vtkPolyDataDecorator*>(viewer));
+    viewer->Render();
+    vtkSmartPointer<vtkWindowToImageFilter> windowToImageFilter =
+      vtkSmartPointer<vtkWindowToImageFilter>::New();
+    windowToImageFilter->SetInput(viewer->GetRenderWindow());
+     vtkSmartPointer<vtkPNGWriter> pngWriter = vtkSmartPointer<vtkPNGWriter>::New();
+    pngWriter->SetInputConnection(windowToImageFilter->GetOutputPort());
+    pngWriter->SetWriteToMemory(true);
+    pngWriter->Write();
+    vtkUnsignedCharArray *result = pngWriter->GetResult();
+    std::ofstream fout(this->POLY_DATA.toStdString(), std::ofstream::out | std::ofstream::binary);
+    fout.write(static_cast<const char*>(result->GetVoidPointer(0)), result->GetNumberOfValues() * sizeof(char));
+    fout.close();
+  }
 private:
   vtkSmartPointer<vtkImageData> image;
   const QString PRESET_SHIFT_OPACITY_SIZE = "preset_shift_opacity_size.png";
@@ -357,6 +547,7 @@ private:
   const QString PAN = "pan.png"; 
   const QString ROTATE = "rotate.png";
   const QString SPIN = "spin.png";
+  const QString POLY_DATA = "polydata.png";
 };
 QTEST_GUILESS_MAIN(Testvtk_volume_viewer_json_interpreter)
 #include "Testvtk_volume_viewer_json_interpreter.moc"
