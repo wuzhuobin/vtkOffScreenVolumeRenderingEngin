@@ -17,9 +17,9 @@ class vtkRenderWindowInteractor;
 class VTKOFFSCREENVOLUMERENDERINGENGIN_EXPORT vtkVolumeViewer: public vtkObject
 {
 public: 
-    static vtkVolumeViewer *New();
-    vtkTypeMacro(vtkVolumeViewer, vtkObject);
-    virtual void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
+  static vtkVolumeViewer *New();
+  vtkTypeMacro(vtkVolumeViewer, vtkObject);
+  virtual void PrintSelf(ostream &os, vtkIndent indent) VTK_OVERRIDE;
 
    /**
    * Get the name of rendering window.
