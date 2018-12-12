@@ -1,6 +1,7 @@
 // me 
 #include "vtk_volume_viewer_json_interpreter.h"
 #include "vtkVolumeViewer.h"
+#include "vtkPolyDataDecorator.h"
 // vtk
 #include <vtkImageViewer2.h>
 #include <vtkRenderer.h>
@@ -151,6 +152,48 @@ void vtk_volume_viewer_json_interpreter::interpret(vtkRenderer *renderer) const
   this->pan(renderer);
   this->spin(renderer);
   this->rotate(renderer);
+}
+
+void vtk_volume_viewer_json_interpreter::interpret(vtkPolyDataDecorator *decorator) const
+{
+  if(decorator == nullptr)
+  {
+    cerr << "decorator is nullptr. \n";
+  }
+  std::string tag;
+  std::string id;
+  if(this->get_value("polyData.tag", tag) && this->get_value("polyData.id", id))
+  {
+    bool existence;
+    if(this->get_value("polyData.existence", existence) && !existence)
+    {
+      if(!decorator->RemovePolyData(id) && this->debug)
+      {
+        std::cerr << "id: " << id << " does not exist. \n";
+        std::cerr << "failed to remove id: " << id << ".\n";
+        return;
+      }
+    }
+    else
+    {
+      if(!decorator->AddPolyData(tag, id) && this->debug)
+      {
+        std::cerr << "tag: " << tag << " does not exist. \n";
+        std::cerr << "failed to add id: " << id << ".\n";
+        return;
+      }
+      array<double, 3> translation;
+      if (this->get_values("polyData.translation", translation))
+      {
+        decorator->TranslatePolyData(id, translation.data());
+      }
+      array<double, 3> rotation;
+      if(this->get_values("polyData.rotation", rotation))
+      {
+        decorator->RotatePolyData(id, rotation.data());
+      }
+    }
+  }
 }
 
 void vtk_volume_viewer_json_interpreter::dolly(vtkRenderer *renderer) const

@@ -7,6 +7,7 @@ class vtkObject;
 class vtkVolumeViewer;
 class vtkImageViewer2;
 class vtkRenderer;
+class vtkPolyDataDecorator;
 //boos
 #include <boost/property_tree/json_parser.hpp>
 // std
@@ -30,6 +31,7 @@ public:
   void interpret(vtkImageViewer2 *viewer) const;
   void interpret(vtkVolumeViewer *viewer) const;
   void interpret(vtkRenderer *renderer) const;
+  void interpret(vtkPolyDataDecorator *decorator) const;
 private:
   void dolly(vtkRenderer *renderer) const;
   void pan(vtkRenderer *renderer) const;
