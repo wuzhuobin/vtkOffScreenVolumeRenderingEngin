@@ -27,8 +27,10 @@ public:
   static bool RemoveFromInternalStorage(const std::string &tag);
   virtual bool AddPolyData(const std::string &tag, const std::string &id);
   virtual bool RemovePolyData(const std::string &id);
+  virtual bool TranslatePolyData(const std::string &id, const double translation[3]);
   virtual bool TranslatePolyData(const std::string &id, std::tuple<double, double, double> &&translation);
   virtual bool TranslatePolyData(const std::string &id, double x, double y, double z);
+  virtual bool RotatePolyData(const std::string &id, const double rotation[3]);
   virtual bool RotatePolyData(const std::string &id, std::tuple<double, double, double> &&rotation);
   virtual bool RotatePolyData(const std::string &id, double x, double y, double z);
   const Repository &GetRepository() const { return this->Repository_; }

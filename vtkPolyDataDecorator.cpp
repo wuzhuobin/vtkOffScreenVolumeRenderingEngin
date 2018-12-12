@@ -30,7 +30,6 @@ bool vtkPolyDataDecorator::AddPolyData(const std::string &tag, const std::string
   auto cit = InternalStorage_.find(tag);
   if(cit == InternalStorage_.cend())
   {
-    std::cerr << "tag: " << tag << " does not exist. \n";
     return false;
   }
   auto cit2 = this->Repository_.find(id);
@@ -51,12 +50,16 @@ bool vtkPolyDataDecorator::RemovePolyData(const std::string &id)
   auto cit = this->Repository_.find(id);
   if(cit == this->Repository_.cend())
   {
-    std::cerr << "id: " << id << " does not exist. \n";
     return false;
   }
   this->DecoratorRenderer->RemoveActor(std::get<2>(cit->second));
   this->Repository_.erase(cit);
   return true;
+}
+
+bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, const double translation[3])
+{
+  return this->TranslatePolyData(id, translation[0], translation[1], translation[2]);
 }
 
 bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, std::tuple<double, double, double> &&translation)
@@ -73,6 +76,11 @@ bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, double x, do
     return false;
   }
   std::get<2>(cit->second)->SetPosition(x, y, z);
+}
+
+bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, const double rotation[3])
+{
+  return this->RotatePolyData(id, rotation[0], rotation[1], rotation[2]);
 }
 
 bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, std::tuple<double, double, double> &&rotation)
