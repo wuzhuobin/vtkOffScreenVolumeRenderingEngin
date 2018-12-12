@@ -93,6 +93,7 @@ private Q_SLOTS:
   }
   void benmarkPNG()
   {
+    QSKIP("Skip benchmark");
     QFETCH(QString, json);
     vtk_off_screen_volume_rendering_facade facade(this->image);
     QBENCHMARK_ONCE
@@ -118,6 +119,7 @@ private Q_SLOTS:
   }
   void benmarkJPEG()
   {
+    QSKIP("Skip benchmark");
     QFETCH(QString, json);
     vtk_off_screen_volume_rendering_facade facade(this->image);
     QBENCHMARK_ONCE

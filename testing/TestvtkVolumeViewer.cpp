@@ -91,7 +91,7 @@ private Q_SLOTS:
       viewer->SetInputData(image);
       viewer->SetupInteractor(Ptr<vtkRenderWindowInteractor>::New());
       viewer->Render();
-      viewer->GetInteractor()->Start();
+      // viewer->GetInteractor()->Start();
   }
 private:
   
