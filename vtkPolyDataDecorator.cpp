@@ -6,67 +6,109 @@
 #include <vtkPolyData.h>
 #include <vtkActor.h>
 #include <vtkPolyDataMapper.h>
-vtkPolyDataDecorator::InternalStorage vtkPolyDataDecorator::internalStorage;
-bool vtkPolyDataDecorator::addPolyData(const std::string &tag, vtkPolyData *data)
+vtkPolyDataDecorator::InternalStorage vtkPolyDataDecorator::InternalStorage_;
+bool vtkPolyDataDecorator::AddToInternalStorage(const std::string &tag, vtkPolyData *data)
 {
   auto polyData = Ptr<vtkPolyData>::New();
   polyData->ShallowCopy(data);
-  return !internalStorage.emplace(tag, polyData).second;
+  return !InternalStorage_.emplace(tag, polyData).second;
 }
 
-bool vtkPolyDataDecorator::removePolyData(const std::string &tag)
+bool vtkPolyDataDecorator::RemoveFromInternalStorage(const std::string &tag)
 {
-  auto cit = internalStorage.find(tag);
-  if(cit == internalStorage.cend())
+  auto cit = InternalStorage_.find(tag);
+  if(cit == InternalStorage_.cend())
   {
     return false;
   }
-  internalStorage.erase(cit);
+  InternalStorage_.erase(cit);
   return true;
 }
 
-bool vtkPolyDataDecorator::addToRenderer(const std::string &tag, const std::string &id)
+bool vtkPolyDataDecorator::AddPolyData(const std::string &tag, const std::string &id)
 {
-  auto cit = internalStorage.find(tag);
-  if(cit == internalStorage.cend())
+  auto cit = InternalStorage_.find(tag);
+  if(cit == InternalStorage_.cend())
   {
     std::cerr << "tag: " << tag << " does not exist. \n";
     return false;
   }
-  auto cit2 = this->repository.find(id);
-  if(cit2 == this->repository.cend())
+  auto cit2 = this->Repository_.find(id);
+  if(cit2 == this->Repository_.cend())
   {
     Tuple tuple(nullptr, Ptr<vtkPolyDataMapper>::New(), Ptr<vtkActor>::New());
-    this->renderer->AddActor(std::get<2>(tuple));
+    this->DecoratorRenderer->AddActor(std::get<2>(tuple));
     std::get<2>(tuple)->SetMapper(std::get<1>(tuple));
-    cit2 = this->repository.emplace(id, tuple).first;
+    cit2 = this->Repository_.emplace(id, tuple).first;
   }
   std::get<0>(cit2->second) = cit->second;
   std::get<1>(cit2->second)->SetInputData(cit->second);
   return true;
 }
 
-bool vtkPolyDataDecorator::removeFromRenderer(const std::string &id)
+bool vtkPolyDataDecorator::RemovePolyData(const std::string &id)
 {
-  auto cit = this->repository.find(id);
-  if(cit == this->repository.cend())
+  auto cit = this->Repository_.find(id);
+  if(cit == this->Repository_.cend())
   {
     std::cerr << "id: " << id << " does not exist. \n";
     return false;
   }
-  this->renderer->RemoveActor(std::get<2>(cit->second));
-  this->repository.erase(cit);
+  this->DecoratorRenderer->RemoveActor(std::get<2>(cit->second));
+  this->Repository_.erase(cit);
   return true;
 }
 
-void vtkPolyDataDecorator::install(vtkRenderer * renderer, vtkRenderWindow * renderWindow)
+bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, std::tuple<double, double, double> &&translation)
 {
-  this->renderer = renderer;
-  this->renderWindow = renderWindow;
+  return this->TranslatePolyData(id, std::get<0>(translation), std::get<1>(translation), std::get<2>(translation));
 }
 
-void vtkPolyDataDecorator::uninstall()
+bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, double x, double y, double z)
 {
-  this->renderer = nullptr;
-  this->renderWindow = nullptr;
+  auto cit = this->Repository_.find(id);
+  if(cit == this->Repository_.cend())
+  {
+    std::cerr << "id: " << id << " does not exist. \n";
+    return false;
+  }
+  std::get<2>(cit->second)->SetPosition(x, y, z);
+}
+
+bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, std::tuple<double, double, double> &&rotation)
+{
+  return this->RotatePolyData(id, std::get<0>(rotation), std::get<1>(rotation), std::get<2>(rotation));
+}
+
+bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, double x, double y, double z)
+{
+  auto cit = this->Repository_.find(id);
+  if(cit == this->Repository_.cend())
+  {
+    std::cerr << "id: " << id << " does not exist. \n";
+    return false;
+  }
+  vtkActor *actor = std::get<2>(cit->second);
+  actor->SetOrigin(actor->GetPosition());
+  actor->SetOrientation(x, y, z);
+}
+
+void vtkPolyDataDecorator::Install(vtkRenderer * renderer)
+{
+  this->DecoratorRenderer = renderer;
+  for(auto cit = this->Repository_.cbegin(); cit != this->Repository_.cend(); ++cit)
+  {
+    vtkActor *actor = std::get<2>(cit->second);
+    this->DecoratorRenderer->AddActor(actor);
+  }
+}
+
+void vtkPolyDataDecorator::Uninstall()
+{
+  for(auto cit = this->Repository_.cbegin(); cit != this->Repository_.cend(); ++cit)
+  {
+    vtkActor *actor = std::get<2>(cit->second);
+    this->DecoratorRenderer->RemoveActor(actor);
+  }
+  this->DecoratorRenderer = nullptr;
 }

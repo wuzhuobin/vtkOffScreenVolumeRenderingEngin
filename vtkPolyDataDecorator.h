@@ -23,31 +23,20 @@ public:
   typedef std::tuple<Ptr<vtkPolyData>, Ptr<vtkPolyDataMapper>, Ptr<vtkActor>> Tuple;
   typedef std::unordered_map<std::string, Ptr<vtkPolyData>> InternalStorage;
   typedef std::unordered_map<std::string, Tuple> Repository;
-  /**
-   * @brief Adding poly data to repository.
-   * 
-   * @param[in]  id 
-   * @param[in]  data 
-   * @return     true, . false,  
-   */
-  static bool addPolyData(const std::string &tag, vtkPolyData *data);
-  /**
-   * @brief   Removing poly data from repository.
-   * 
-   * @param id 
-   * @return true 
-   * @return false 
-   */
-  static bool removePolyData(const std::string &tag);
-  bool addToRenderer(const std::string &tag, const std::string &id);
-  bool removeFromRenderer(const std::string &id);
-  const Repository &getRepository() const { return this->repository; }
+  static bool AddToInternalStorage(const std::string &tag, vtkPolyData *data);
+  static bool RemoveFromInternalStorage(const std::string &tag);
+  virtual bool AddPolyData(const std::string &tag, const std::string &id);
+  virtual bool RemovePolyData(const std::string &id);
+  virtual bool TranslatePolyData(const std::string &id, std::tuple<double, double, double> &&translation);
+  virtual bool TranslatePolyData(const std::string &id, double x, double y, double z);
+  virtual bool RotatePolyData(const std::string &id, std::tuple<double, double, double> &&rotation);
+  virtual bool RotatePolyData(const std::string &id, double x, double y, double z);
+  const Repository &GetRepository() const { return this->Repository_; }
 protected:
-  virtual void install(vtkRenderer *renderer, vtkRenderWindow *renderWindow);
-  virtual void uninstall();
-  Repository repository;
-  static InternalStorage internalStorage;
-  vtkRenderer *renderer = nullptr;
-  vtkRenderWindow *renderWindow = nullptr;
+  virtual void Install(vtkRenderer *renderer);
+  virtual void Uninstall();
+  Repository Repository_;
+  static InternalStorage InternalStorage_;
+  vtkRenderer *DecoratorRenderer = nullptr;
 };
 #endif //!__VTK_VIEWER_DECORATOR_H__
