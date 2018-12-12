@@ -1,6 +1,7 @@
 // me 
 #include "vtk_off_screen_volume_rendering_facade.h"
 #include "vtkVolumeViewer.h"
+#include "vtkVolumeViewerPolyData.h"
 #include "vtk_volume_viewer_json_interpreter.h"
 // vtk 
 #include <vtkImageData.h>
@@ -17,35 +18,37 @@ template<typename T>
 using ptr = vtkSmartPointer<T>;
 
 vtk_off_screen_volume_rendering_facade::vtk_off_screen_volume_rendering_facade(vtkImageData *imageData, bool _2d) :
-  imageViewer2(nullptr),
-  volumeViewer(nullptr)
+  viewer(nullptr)
 {
   if(_2d)
   {
-    this->imageViewer2 = vtkImageViewer2::New();
-    this->imageViewer2->SetOffScreenRendering(true);
-    this->imageViewer2->SetInputData(imageData);
-    this->imageViewer2->Render();
+    vtkImageViewer2 *imageViewer2 = vtkImageViewer2::New();
+    imageViewer2->SetOffScreenRendering(true);
+    imageViewer2->SetInputData(imageData);
+    imageViewer2->Render();
+    this->viewer = imageViewer2;
   }
   else
   {
-    this->volumeViewer = vtkVolumeViewer::New();
-    this->volumeViewer->SetOffScreenRendering(true);
-    this->volumeViewer->SetInputData(imageData);
-    this->volumeViewer->Render();
+    vtkVolumeViewer *volumeViewer = vtkVolumeViewerPolyData::New();
+    volumeViewer->SetOffScreenRendering(true);
+    volumeViewer->SetInputData(imageData);
+    volumeViewer->Render();
+    this->viewer = volumeViewer;
   }
 }
 
 vtk_off_screen_volume_rendering_facade::~vtk_off_screen_volume_rendering_facade()
 {
-  if(this->volumeViewer)
-  {
-    this->volumeViewer->Delete();
-  }
-  if(this->imageViewer2)
-  {
-    this->imageViewer2->Delete();
-  }
+  // if(this->volumeViewer)
+  // {
+  //   this->volumeViewer->Delete();
+  // }
+  // if(this->imageViewer2)
+  // {
+  //   this->imageViewer2->Delete();
+  // }
+  this->viewer->Delete();
 }
 
 const unsigned char * vtk_off_screen_volume_rendering_facade::render_png(const std::string &json, std::vector<unsigned char> & png_data)
@@ -53,15 +56,22 @@ const unsigned char * vtk_off_screen_volume_rendering_facade::render_png(const s
   vtk_volume_viewer_json_interpreter interpreter(false);
   interpreter.read_json(json);
   vtkNew<vtkWindowToImageFilter> window_to_image_filter;
-  if(this->volumeViewer)
+  vtkVolumeViewer *volumeViewer = vtkVolumeViewer::SafeDownCast(this->viewer);
+  vtkImageViewer2 *imageViewer2 = vtkImageViewer2::SafeDownCast(this->viewer);
+  vtkPolyDataDecorator *decorator = dynamic_cast<vtkPolyDataDecorator*>(this->viewer);
+  if(volumeViewer)
   {
-    interpreter.interpret(this->volumeViewer);
-    window_to_image_filter->SetInput(this->volumeViewer->GetRenderWindow());
+    interpreter.interpret(volumeViewer);
+    window_to_image_filter->SetInput(volumeViewer->GetRenderWindow());
   }
-  if(this->imageViewer2)
+  if(imageViewer2)
   {
-    interpreter.interpret(this->imageViewer2);
-    window_to_image_filter->SetInput(this->imageViewer2->GetRenderWindow());
+    interpreter.interpret(imageViewer2);
+    window_to_image_filter->SetInput(imageViewer2->GetRenderWindow());
+  }
+  if(decorator)
+  {
+    interpreter.interpret(decorator);
   }
   this->render_imp();
   vtkNew<vtkPNGWriter> png_writer;
@@ -79,15 +89,17 @@ const unsigned char * vtk_off_screen_volume_rendering_facade::render_jpeg(const 
   vtk_volume_viewer_json_interpreter interpreter(false);
   interpreter.read_json(json);
   vtkNew<vtkWindowToImageFilter> window_to_image_filter;
-  if(this->volumeViewer)
+  vtkVolumeViewer *volumeViewer = vtkVolumeViewer::SafeDownCast(this->viewer);
+  vtkImageViewer2 *imageViewer2 = vtkImageViewer2::SafeDownCast(this->viewer);
+  if(volumeViewer)
   {
-    interpreter.interpret(this->volumeViewer);
-    window_to_image_filter->SetInput(this->volumeViewer->GetRenderWindow());
+    interpreter.interpret(volumeViewer);
+    window_to_image_filter->SetInput(volumeViewer->GetRenderWindow());
   }
-  if(this->imageViewer2)
+  if(imageViewer2)
   {
-    interpreter.interpret(this->imageViewer2);
-    window_to_image_filter->SetInput(this->imageViewer2->GetRenderWindow());
+    interpreter.interpret(imageViewer2);
+    window_to_image_filter->SetInput(imageViewer2->GetRenderWindow());
   }
   this->render_imp();
   vtkNew<vtkJPEGWriter> jpeg_writer;
@@ -102,13 +114,14 @@ const unsigned char * vtk_off_screen_volume_rendering_facade::render_jpeg(const 
 
 void vtk_off_screen_volume_rendering_facade::render_imp()
 {
-  // boost::lock_guard<boost::mutex> lock(*this->mutex);
-  if(this->volumeViewer)
+  vtkVolumeViewer *volumeViewer = vtkVolumeViewer::SafeDownCast(this->viewer);
+  vtkImageViewer2 *imageViewer2 = vtkImageViewer2::SafeDownCast(this->viewer);
+  if(volumeViewer)
   {
-    this->volumeViewer->Render();
+    volumeViewer->Render();
   }
-  if(this->imageViewer2)
+  if(imageViewer2)
   {
-    this->imageViewer2->Render();
+    imageViewer2->Render();
   }
 }

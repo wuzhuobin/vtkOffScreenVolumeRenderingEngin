@@ -3,10 +3,11 @@
 #pragma once
 // me 
 #include "vtkoffscreenvolumerenderingengin_export.h"
-class vtkVolumeViewer;
-class vtkImageViewer2;
+// class vtkVolumeViewer;
+// class vtkImageViewer2;
 // class vtk_volume_viewer_json_interpreter;
 class vtkImageData;
+class vtkObject;
 // boost
 namespace boost
 {
@@ -29,9 +30,9 @@ private:
   void operator=(const vtk_off_screen_volume_rendering_facade&) = delete;
   void operator=(vtk_off_screen_volume_rendering_facade&&) = delete;
   void render_imp();
-
-  vtkVolumeViewer *volumeViewer;
-  vtkImageViewer2 *imageViewer2;
+  vtkObject *viewer;
+  // vtkVolumeViewer *volumeViewer;
+  // vtkImageViewer2 *imageViewer2;
 };
 
 #endif //!__VTK_OFF_SCREEN_VOLUME_RENDERING_FACADE_H__
