@@ -104,6 +104,8 @@ private Q_SLOTS:
     viewer->AddPolyData(tag2, id2);
     viewer->SetupInteractor(Ptr<vtkRenderWindowInteractor>::New());
     viewer->Render();
+    viewer->RemovePolyData(id1);
+    viewer->RemovePolyData(id2);
     vtkPolyDataDecorator::RemoveFromInternalStorage(tag1);
     vtkPolyDataDecorator::RemoveFromInternalStorage(tag2);
     // viewer->GetInteractor()->Start();
