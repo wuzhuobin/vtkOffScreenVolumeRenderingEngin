@@ -62,7 +62,7 @@ bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, const double
   return this->TranslatePolyData(id, translation[0], translation[1], translation[2]);
 }
 
-bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, std::tuple<double, double, double> &&translation)
+bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, const std::tuple<double, double, double> &translation)
 {
   return this->TranslatePolyData(id, std::get<0>(translation), std::get<1>(translation), std::get<2>(translation));
 }
@@ -84,7 +84,7 @@ bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, const double ro
   return this->RotatePolyData(id, rotation[0], rotation[1], rotation[2]);
 }
 
-bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, std::tuple<double, double, double> &&rotation)
+bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, const std::tuple<double, double, double> &rotation)
 {
   return this->RotatePolyData(id, std::get<0>(rotation), std::get<1>(rotation), std::get<2>(rotation));
 }
