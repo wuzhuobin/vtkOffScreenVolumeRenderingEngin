@@ -4,6 +4,7 @@
 #include <vtkObjectFactory.h>
 #include <vtkRenderer.h>
 #include <vtkSmartPointer.h>
+#include <vtkPolyDataMapper.h>
 #include <vtkStripper.h>
 #include <vtkTriangleFilter.h>
 #include <vtkCutter.h>
@@ -11,6 +12,9 @@
 #include <vtkInformationVector.h>
 #include <vtkInformation.h>
 #include <vtkTransform.h>
+#include <vtkRenderWindow.h>
+#include <vtkImageData.h>
+#include <vtkPassArrays.h>
 class vtkStripperPolygon : public vtkStripper 
 {
 public :
@@ -63,7 +67,7 @@ void vtkImageViewer2PolyData::UpdateDisplayExtent()
   }
 }
 
-void vtkImageViewer2PolyData::AddPolyData(const std::string &tag, const std::string &id)
+bool vtkImageViewer2PolyData::AddPolyData(const std::string &tag, const std::string &id)
 {
   auto cit = InternalStorage_.find(tag);
   if(cit == InternalStorage_.cend())
@@ -89,13 +93,18 @@ void vtkImageViewer2PolyData::AddPolyData(const std::string &tag, const std::str
   stripper->SetInputConnection(cutter->GetOutputPort());
   auto triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
   triangleFilter->SetInputConnection(stripper->GetOutputPort());
-  std::get<1>(cit2->second)->SetInputConnection(triangleFilter->GetOutputPort());
+  auto passArrays = vtkSmartPointer<vtkPassArrays>::New();
+  passArrays->SetInputConnection(triangleFilter->GetOutputPort());
+  passArrays->UseFieldTypesOn();
+  passArrays->AddFieldType(vtkDataObject::POINT);
+  std::get<1>(cit2->second)->SetInputConnection(passArrays->GetOutputPort());
+  this->UpdateCutterPlane(cit2->first);
   return true;
 }
 
-void vtkImageViewer2PolyData::RemovePolyData(const std::string &id)
+bool vtkImageViewer2PolyData::RemovePolyData(const std::string &id)
 {
-  if(Superclass::RemovePolyData(id))
+  if(vtkPolyDataDecorator::RemovePolyData(id))
   {
     auto cit = this->Planes_.find(id);
     if(cit == this->Planes_.cend())
@@ -122,9 +131,9 @@ void vtkImageViewer2PolyData::InstallPipeline()
 
 void vtkImageViewer2PolyData::UnInstallPipeline()
 {
+  this->Uninstall();
   this->GetRenderWindow()->SetNumberOfLayers(1);
   this->GetRenderWindow()->RemoveRenderer(this->DecoratorRenderer);
-  this->Uninstall();
   Superclass::UnInstallPipeline();
 }
 
@@ -143,11 +152,9 @@ bool vtkImageViewer2PolyData::UpdateCutterPlane(const std::string &id)
   transform->SetMatrix(actor->GetMatrix());
   double normal[3]{0};
   double origin[3]{0};
-  const double *origin = this->GetInput()->GetOrigin();
-  const double *spacing = this->GetInput()->GetSpacing();
   normal[this->SliceOrientation] = 1;
   origin[this->SliceOrientation] =
-    (this->Slice * spacing[this->SliceOrientation]) + origin[this->SliceOrientation];
+    (this->Slice * this->GetInput()->GetSpacing()[this->SliceOrientation]) + this->GetInput()->GetOrigin()[this->SliceOrientation];
   vtkPlane *plane = cit1->second;
   plane->SetOrigin(origin);
   plane->SetNormal(normal);

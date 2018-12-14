@@ -7,7 +7,7 @@
 // vtk
 #include <vtkImageViewer2.h>
 #include <vtkWeakPointer.h>
-class vtkCutter;
+class vtkPlane;
 class VTKOFFSCREENVOLUMERENDERINGENGIN_EXPORT vtkImageViewer2PolyData: 
   public vtkImageViewer2, 
   public vtkPolyDataDecorator
@@ -17,8 +17,8 @@ public:
   vtkTypeMacro(vtkImageViewer2PolyData, vtkImageViewer2);
   virtual void PrintSelf(std::ostream &os, vtkIndent indent) VTK_OVERRIDE;
   virtual void UpdateDisplayExtent() VTK_OVERRIDE;
-  virtual void AddPolyData(const std::string &tag, const std::string &id) VTK_OVERRIDE;
-  virtual void RemovePolyData(const std::string &id) VTK_OVERRIDE;
+  virtual bool AddPolyData(const std::string &tag, const std::string &id) VTK_OVERRIDE;
+  virtual bool RemovePolyData(const std::string &id) VTK_OVERRIDE;
 protected:
   vtkImageViewer2PolyData();
   virtual ~vtkImageViewer2PolyData() VTK_OVERRIDE;
