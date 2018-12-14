@@ -2,6 +2,7 @@
 #include "vtk_off_screen_volume_rendering_facade.h"
 #include "vtkVolumeViewer.h"
 #include "vtkVolumeViewerPolyData.h"
+#include "vtkImageViewer2PolyData.h"
 #include "vtk_volume_viewer_json_interpreter.h"
 // vtk 
 #include <vtkImageData.h>
@@ -22,7 +23,7 @@ vtk_off_screen_volume_rendering_facade::vtk_off_screen_volume_rendering_facade(v
 {
   if(_2d)
   {
-    vtkImageViewer2 *imageViewer2 = vtkImageViewer2::New();
+    vtkImageViewer2 *imageViewer2 = vtkImageViewer2PolyData::New();
     imageViewer2->SetOffScreenRendering(true);
     imageViewer2->SetInputData(imageData);
     imageViewer2->Render();
