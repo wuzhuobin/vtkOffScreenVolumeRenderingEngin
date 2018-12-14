@@ -76,6 +76,7 @@ bool vtkPolyDataDecorator::TranslatePolyData(const std::string &id, double x, do
     return false;
   }
   std::get<2>(cit->second)->SetPosition(x, y, z);
+  return true;
 }
 
 bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, const double rotation[3])
@@ -99,6 +100,7 @@ bool vtkPolyDataDecorator::RotatePolyData(const std::string &id, double x, doubl
   vtkActor *actor = std::get<2>(cit->second);
   actor->SetOrigin(actor->GetPosition());
   actor->SetOrientation(x, y, z);
+  return true;
 }
 
 void vtkPolyDataDecorator::Install(vtkRenderer * renderer)

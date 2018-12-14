@@ -35,8 +35,8 @@ public:
   virtual bool RotatePolyData(const std::string &id, double x, double y, double z);
   const Repository &GetRepository() const { return this->Repository_; }
 protected:
-  virtual void Install(vtkRenderer *renderer);
-  virtual void Uninstall();
+  void Install(vtkRenderer *renderer);
+  void Uninstall();
   Repository Repository_;
   static InternalStorage InternalStorage_;
   vtkRenderer *DecoratorRenderer = nullptr;
