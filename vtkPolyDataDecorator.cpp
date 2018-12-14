@@ -120,5 +120,5 @@ void vtkPolyDataDecorator::Uninstall()
     vtkActor *actor = std::get<2>(cit->second);
     this->DecoratorRenderer->RemoveActor(actor);
   }
-  this->DecoratorRenderer = nullptr;
+  // this->DecoratorRenderer = nullptr;
 }
