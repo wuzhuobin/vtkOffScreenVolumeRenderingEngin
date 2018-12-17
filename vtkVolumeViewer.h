@@ -1,7 +1,8 @@
 /**
  * @file		vtkVolumeViewer.h
- * @author	wuzhuobin jiejin2022@163.com
- * @date    2017/12/28
+ * @author	WUZHUOBIN jiejin2022@163.com
+ * @since   Dec.17.2018
+ * @date    Dec.17.2018
  * @copyright
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 	This program is distributed in the hope that it will be useful, but	<br>
@@ -36,6 +37,8 @@ class vtkRenderWindowInteractor;
 /**
  * @class vtkVolumeViewer
  * @brief  Display a 3D image in volume. 
+ * @author WUZHUOBIN
+ * @date   Dec.17.2018
  * @see vtkImageViewer2
  * 
  * vtkVolumeViewer is a convenience class for displaying a 3D volume image.
