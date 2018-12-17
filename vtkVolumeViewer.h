@@ -1,7 +1,26 @@
+/**
+ * @file		vtkVolumeViewer.h
+ * @author	wuzhuobin jiejin2022@163.com
+ * @date    2017/12/28
+ * @copyright
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	This program is distributed in the hope that it will be useful, but	<br>
+	WITHOUT ANY WARRANTY; without even the implied warranty of <br>
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. <br>
+	See the LICENSE for more detail. <br> 
+	Copyright (c) WUZHUOBIN. All rights reserved. <br>
+	See COPYRIGHT for more detail. <br>
+	This software is distributed WITHOUT ANY WARRANTY; without even <br>
+	the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR <br>
+	PURPOSE.  See the above copyright notice for more information. <br>
+	Internal usage only, without the permission of the author, please DO <br>
+	NOT publish and distribute without the author's permission. <br>
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
 #ifndef __VTK_VOLUME_VIEWER_H__
 #define __VTK_VOLUME_VIEWER_H__
 #pragma once
-// me 
+// me
 #include "vtkoffscreenvolumerenderingengin_export.h"
 // vtk
 #include <vtkObject.h>
@@ -14,6 +33,15 @@ class vtkInteractorObserver;
 class vtkRenderWindow;
 class vtkRenderer;
 class vtkRenderWindowInteractor;
+/**
+ * @class vtkVolumeViewer
+ * @brief  Display a 3D image in volume. 
+ * @see vtkImageViewer2
+ * 
+ * vtkVolumeViewer is a convenience class for displaying a 3D volume image.
+ * It works just like vtkImageViewer, which is exactly the same pipeline. The 
+ * class internally supports a few volume rendering presets, #EnumPreset. 
+ */
 class VTKOFFSCREENVOLUMERENDERINGENGIN_EXPORT vtkVolumeViewer: public vtkObject
 {
 public: 
@@ -41,19 +69,6 @@ public:
   virtual vtkImageData *GetInput();
   virtual void SetInputConnection(vtkAlgorithmOutput* input);
   //@}
-  /**
-   * Update the display extent manually so that the proper slice for the
-   * given orientation is displayed. It will also try to set a
-   * reasonable camera clipping range.
-   * This method is called automatically when the Input is changed, but
-   * most of the time the input of this class is likely to remain the same,
-   * i.e. connected to the output of a filter, or an image reader. When the
-   * input of this filter or reader itself is changed, an error message might
-   * be displayed since the current display extent is probably outside
-   * the new whole extent. Calling this method will ensure that the display
-   * extent is reset properly.
-   */
-//   virtual void UpdateDisplayExtent();
   typedef enum
   {
       NONE = 0,
@@ -84,21 +99,52 @@ public:
       CBCT_DENTAL,
       CBCT_DENTAL_PHANTOM
   } EnumPreset;
+  /**
+   * @brief Set the Preset.
+   * @param prest Set the #Preset.
+   * 
+   * The Preset is clamped 0~26, which is related to #EnumPreset. 
+   */
   virtual void SetPreset(int prest);
+  /**
+   * @brief Get the Preset
+   * @return  Preset
+   * 
+   */
   vtkGetMacro(Preset, int);
-
+  
+  /**
+   * @brief Set the Shift.
+   * @param shift 
+   * 
+   * Set the Shift of the scale of image data. 
+   */
   virtual void SetShift(double shift);
+  /**
+   * @brief  Get the Shift. 
+   * @return Shift
+   */
   vtkGetMacro(Shift, double);
 
+  /**
+   * @brief Set the Opacity.
+   * @param opacity 
+   * 
+   * Set the opacity of the volume rendering.
+   */
   virtual void SetOpacity(double opacity);
+  /**
+   * @brief Get the Opacity. 
+   * @return Opacity
+   */
   vtkGetMacro(Opacity, double);
   // //@{
   // /**
   //  * These are here when using a Tk window.
   //  */
-  // virtual void SetDisplayId(void *a);
-  // virtual void SetWindowId(void *a);
-  // virtual void SetParentId(void *a);
+  virtual void SetDisplayId(void *a);
+  virtual void SetWindowId(void *a);
+  virtual void SetParentId(void *a);
   // //@}
 
   //@{
@@ -168,9 +214,9 @@ protected:
   vtkVolume                       *Volume;
 
   bool FirstRender;
-  int Preset;
-  double Shift;
-  double Opacity;
+  int Preset;           ///< Represent the current volume rendering preset. 
+  double Shift;         ///< Shift the scale before volume rendering. 
+  double Opacity;       ///< The opacity of volume rendering.
 
   vtkAlgorithm* GetInputAlgorithm();
   vtkInformation* GetInputInformation();
