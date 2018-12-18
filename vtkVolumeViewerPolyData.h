@@ -56,13 +56,15 @@ protected:
    */
   virtual ~vtkVolumeViewerPolyData() VTK_OVERRIDE;
   /**
-   * @brief Invoke vtkVolumeViewer#InstallPipeline, vtkPolyDataDecorator#Install.
+   * @brief   Install the rendering pipeline.
    * 
+   * Invoke vtkVolumeViewer#InstallPipeline, vtkPolyDataDecorator#Install.
    */
   virtual void InstallPipeline() VTK_OVERRIDE;
   /**
-   * @brief Invoke vtkVolumeViewer#UnInstallPipeline, vtkPolyDataDecorator#Uninstall. 
-   *
+   * @brief   Uninstall the rendering pipeline.
+   * 
+   * Invoke vtkVolumeViewer#UnInstallPipeline, vtkPolyDataDecorator#Uninstall. 
    */
   virtual void UnInstallPipeline() VTK_OVERRIDE;
 };
