@@ -5,17 +5,17 @@
  * @date    Dec.17.2018
  * @copyright
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-	This program is distributed in the hope that it will be useful, but	<br>
-	WITHOUT ANY WARRANTY; without even the implied warranty of <br>
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. <br>
-	See the LICENSE for more detail. <br> 
-	Copyright (c) WUZHUOBIN. All rights reserved. <br>
-	See COPYRIGHT for more detail. <br>
-	This software is distributed WITHOUT ANY WARRANTY; without even <br>
-	the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR <br>
-	PURPOSE.  See the above copyright notice for more information. <br>
-	Internal usage only, without the permission of the author, please DO <br>
-	NOT publish and distribute without the author's permission. <br>
+  &nbsp;  This program is distributed in the hope that it will be useful, but	<br>
+  &nbsp;  WITHOUT ANY WARRANTY; without even the implied warranty of <br>
+  &nbsp;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. <br>
+  &nbsp;  See the LICENSE for more detail. <br> 
+  &nbsp;  Copyright (c) WUZHUOBIN. All rights reserved. <br>
+  &nbsp;  See COPYRIGHT for more detail. <br>
+  &nbsp;  This software is distributed WITHOUT ANY WARRANTY; without even <br>
+  &nbsp;  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR <br>
+  &nbsp;  PURPOSE.  See the above copyright notice for more information. <br>
+  &nbsp;  Internal usage only, without the permission of the author, please DO <br>
+  &nbsp;  NOT publish and distribute without the author's permission. <br>
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 #ifndef __VTK_VOLUME_VIEWER_H__
@@ -35,10 +35,11 @@ class vtkRenderWindow;
 class vtkRenderer;
 class vtkRenderWindowInteractor;
 /**
- * @class vtkVolumeViewer
- * @brief  Display a 3D image in volume. 
- * @author WUZHUOBIN
- * @date   Dec.17.2018
+ * @class      vtkVolumeViewer
+ * @brief      Display a 3D image in volume. 
+ * @author     WUZHUOBIN
+ * @date       Dec.17.2018
+ * @version    0.0
  * @see vtkImageViewer2
  * 
  * vtkVolumeViewer is a convenience class for displaying a 3D volume image.
