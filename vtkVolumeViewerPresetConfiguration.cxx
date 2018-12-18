@@ -1,3 +1,24 @@
+/**
+ * @file    vtkVolumeViewerPresetConfiguration.cxx
+ * @author	WUZHUOBIN jiejin2022@163.com
+ * @since   Dec.18.2018
+ * @date    Dec.18.2018
+ * @copyright
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+  &nbsp;  This program is distributed in the hope that it will be useful, but	<br>
+  &nbsp;  WITHOUT ANY WARRANTY; without even the implied warranty of <br>
+  &nbsp;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. <br>
+  &nbsp;  See the LICENSE for more detail. <br> 
+  &nbsp;  Copyright (c) WUZHUOBIN. All rights reserved. <br>
+  &nbsp;  See COPYRIGHT for more detail. <br>
+  &nbsp;  This software is distributed WITHOUT ANY WARRANTY; without even <br>
+  &nbsp;  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR <br>
+  &nbsp;  PURPOSE.  See the above copyright notice for more information. <br>
+  &nbsp;  Internal usage only, without the permission of the author, please DO <br>
+  &nbsp;  NOT publish and distribute without the author's permission. <br>
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
+
 // me 
 #include "vtkVolumeViewer.h"
 // vtk
@@ -40,7 +61,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 	switch (preset)
 	{
 	case NONE:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -54,7 +74,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		break;
 
 	case CT_AAA:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -83,7 +102,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_AAA2:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -116,7 +134,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_BONE:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -141,7 +158,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_BONES:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -167,7 +183,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(985.12 + shift, 1.00);
 		break;
 	case CT_CARDIAC:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -196,7 +211,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255, 1.00);
 		break;
 	case CT_CARDIAC2:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -225,7 +239,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_CARDIAC3:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -256,7 +269,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_CHEST_CONTRAST_ENHANCED:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -283,7 +295,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_CHEST_VESSELS:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -310,7 +321,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_CORONARY_ARTERIES:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(0);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -339,7 +349,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_CORONARY_ARTERIES2:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -369,7 +378,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_CORONARY_ARTERIES3:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -401,7 +409,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_CROPPED_VOLUME_BONE:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(0);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -428,7 +435,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_FAT:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(0);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -461,7 +467,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(988.00, 1.00);
 		break;
 	case CT_LIVER_VASCULATURE:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(0);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -492,7 +497,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_LUNG:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -522,7 +526,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(988.00 + shift, 1.00);
 		break;
 	case CT_MIP:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -548,7 +551,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_MUSCLE:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.1);
@@ -576,7 +578,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255, 1.00);
 		break;
 	case CT_PULMONARY_ARTERIES:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -608,7 +609,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case CT_SOFT_TISSUE:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(0);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -636,7 +636,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case MR_ANGIO:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -666,7 +665,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case MR_DEFAULT:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -696,7 +694,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case MR_MIP:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(0);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
@@ -722,7 +719,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(255 + shift, 1.00);
 		break;
 	case MRT2_BRAIN:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.3);
@@ -749,7 +745,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(106.25 + shift, 1.00);
 		break;
 	case CBCT_DENTAL:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.9);
@@ -778,7 +773,6 @@ void set_volume_property(vtkVolume *&volume, const int & preset, const double & 
 		volume->GetProperty()->GetGradientOpacity()->AddPoint(985.12 + shift, 1.00);
 		break;
 	case CBCT_DENTAL_PHANTOM:
-		volume->GetProperty()->ShadeOn();
 		volume->GetProperty()->SetShade(1);
 		volume->GetProperty()->SetInterpolationTypeToLinear();
 		volume->GetProperty()->SetAmbient(0.2);
