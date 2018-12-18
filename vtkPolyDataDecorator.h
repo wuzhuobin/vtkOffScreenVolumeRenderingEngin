@@ -143,24 +143,21 @@ public:
    */
   virtual bool RemovePolyData(const std::string &id);
   /**
-   * @copybrief     #TranslatePolyData(const std::string &id, double x, double y, double z)
    * @overload
    * @param         translation 
    * 
-   * @copydetails   #TranslatePolyData(const std::string &id, double x, double y, double z)
+   * @copydoc       #TranslatePolyData(const std::string &id, double x, double y, double z)
    */
   virtual bool TranslatePolyData(const std::string &id, const double translation[3]);
   /**
-   * @copybrief     #TranslatePolyData(const std::string &id, double x, double y, double z)
    * @overload
    * @param         translation 
    * 
-   * @copydetails   #TranslatePolyData(const std::string &id, double x, double y, double z)
+   * @copydoc       #TranslatePolyData(const std::string &id, double x, double y, double z)
    */
   virtual bool TranslatePolyData(const std::string &id, const std::tuple<double, double, double> &translation);
   /**
    * @brief      Set the position of the specified data.
-   * @overload
    * @param id   The unique id of the data.
    * @param x    Translation x.
    * @param y    Translation y.
@@ -173,19 +170,17 @@ public:
    */
   virtual bool TranslatePolyData(const std::string &id, double x, double y, double z);
   /**
-   * @copybrief        #RotatePolyData(const std::string &id, double x, double y, double z)
    * @overload
    * @param rotation   Rotate in degree.
    * 
-   * @copydetails      #RotatePolyData(const std::string &id, double x, double y, double z)
+   * @copydoc          #RotatePolyData(const std::string &id, double x, double y, double z)
    */
   virtual bool RotatePolyData(const std::string &id, const double rotation[3]);
   /**
-   * @copybrief        #RotatePolyData(const std::string &id, double x, double y, double z)
    * @overload
    * @param rotation   Rotate in degree.
    * 
-   * @copydetails      #RotatePolyData(const std::string &id, double x, double y, double z)
+   * @copydoc          #RotatePolyData(const std::string &id, double x, double y, double z)
    */
   virtual bool RotatePolyData(const std::string &id, const std::tuple<double, double, double> &rotation);
   /**
