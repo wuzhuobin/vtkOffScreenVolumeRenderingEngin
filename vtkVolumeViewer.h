@@ -2,7 +2,7 @@
  * @file		vtkVolumeViewer.h
  * @author	WUZHUOBIN jiejin2022@163.com
  * @since   Dec.17.2018
- * @date    Dec.17.2018
+ * @date    Dec.18.2018
  * @copyright
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
   &nbsp;  This program is distributed in the hope that it will be useful, but	<br>
@@ -38,13 +38,28 @@ class vtkRenderWindowInteractor;
  * @class      vtkVolumeViewer
  * @brief      Display a 3D image in volume. 
  * @author     WUZHUOBIN
- * @date       Dec.17.2018
+ * @date       Dec.18.2018
  * @version    0.0
  * @see vtkImageViewer2
  * 
  * vtkVolumeViewer is a convenience class for displaying a 3D volume image.
  * It works just like vtkImageViewer, which is exactly the same pipeline. The 
- * class internally supports a few volume rendering presets, #EnumPreset. 
+ * class internally supports a few volume rendering presets, #EnumPreset, which
+ * is copied from 3DSlicer.
+ * <h4>Example</h4>
+ * \code{cpp}
+ * vtkSmartPointer<vtkVolumeViewer> volumeViewer = 
+ *   vtkSmartPointer<vtkVolumeViewer>::New();
+ * volumeViewer->SetInputConnection(reader->GetOuputPort());
+ * volumeViewer->SetupInteractor(renderWindowInteractor);
+ * volumeViewer->SetPreset(vtkVolumeViewer::CT_AAA);
+ * volumeViewer->SetShift(100);
+ * volumeViewer->SetOpacity(1);
+ * volumeViewer->Render();
+ * volumeViewer->GetRenderer()->ResetCamera();
+ * volumeViewer->Render();
+ * renderWindowInteractor->Start();
+ * \endcode
  */
 class VTKOFFSCREENVOLUMERENDERINGENGIN_EXPORT vtkVolumeViewer: public vtkObject
 {
