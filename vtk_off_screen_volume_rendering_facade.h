@@ -32,13 +32,13 @@ class vtkObject;
 /**
  * @class      vtk_off_screen_volume_rendering_facade
  * @brief      The simplest interface of off-screen rendering. 
- * @authro     WUZHUOBIN
+ * @author     WUZHUOBIN
  * @date       Dec.18.2018
  * @version    0.0
  * 
  * This class is a facade class which is a software-design pattern. A facade in an object that
  * serves as a front-facing interface masking complex underlying or structure, e.g. 
- * vtk_volume_viewer_json_interpreter, vtkImageViewerPolyData. The detail of facade can be 
+ * vtk_volume_viewer_json_interpreter, vtkImageViewer2PolyData. The detail of facade can be 
  * check <a href="https://en.wikipedia.org/wiki/Facade_pattern">Facade patter</a>. 
  * So this class is trying masking others class in this library and provides extermely simple
  * facade interface.
