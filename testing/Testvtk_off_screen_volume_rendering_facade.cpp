@@ -1,3 +1,23 @@
+/**
+ * @file		Testvtk_off_screen_volume_rendering_facade.cpp
+ * @author	WUZHUOBIN jiejin2022@163.com
+ * @since   Dec.19.2018
+ * @date    Dec.19.2018
+ * @copyright
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+  &nbsp;  This program is distributed in the hope that it will be useful, but	<br>
+  &nbsp;  WITHOUT ANY WARRANTY; without even the implied warranty of <br>
+  &nbsp;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. <br>
+  &nbsp;  See the LICENSE for more detail. <br> 
+  &nbsp;  Copyright (c) WUZHUOBIN. All rights reserved. <br>
+  &nbsp;  See COPYRIGHT for more detail. <br>
+  &nbsp;  This software is distributed WITHOUT ANY WARRANTY; without even <br>
+  &nbsp;  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR <br>
+  &nbsp;  PURPOSE.  See the above copyright notice for more information. <br>
+  &nbsp;  Internal usage only, without the permission of the author, please DO <br>
+  &nbsp;  NOT publish and distribute without the author's permission. <br>
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ */
 // qt 
 #include <QTest>
 #include <QObject>
@@ -59,7 +79,11 @@ void CreateImageData(vtkImageData* imageData)
  
   imageData->ShallowCopy(t->GetOutput());
 }
-
+/**
+ * @class    Testvtk_off_screen_volume_rendering_facade
+ * @brief    Test vtk_off_screen_volume_rendering_facade.
+ * @test     Tests to write the render window image as png or jpeg to disk. 
+ */
 class Testvtk_off_screen_volume_rendering_facade : public QObject
 {
   Q_OBJECT;
