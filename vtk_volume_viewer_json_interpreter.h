@@ -41,7 +41,15 @@ class vtkPolyDataDecorator;
  * @date        Dec.18.2018
  * @version     0.0
  * 
+ * This class is both bridge class and interpreter class. A bridge class is trying to 
+ * decouple the detail implementation os subclasses of vtkPolyDataDecorator, 
+ * vtkImageViewer2 and vtkVolumeViewer. A interpret class is trying to specific how to 
+ * evaluate the json string and intrepret the json for a client. The detail about 
+ * <a href="https://en.wikipedia.org/wiki/Bridge_pattern">Bridge pattern</a>. The detail 
+ * about <a href="https://en.wikipedia.org/wiki/Interpreter_pattern">Interpreter pattern</a>.
  * 
+ * This class uses a wrong name. The class can interpret both vtkImageViewer2 and
+ * vtkVolumeViewer. 
  * <h4>Example</h4>
  * @code
  * std::string json = ...;

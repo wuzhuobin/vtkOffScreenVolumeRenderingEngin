@@ -35,9 +35,6 @@
 #include <vtkRenderWindow.h>
 #include <vtkImageViewer2.h>
 
-template<typename T>
-using ptr = vtkSmartPointer<T>;
-
 vtk_off_screen_volume_rendering_facade::vtk_off_screen_volume_rendering_facade(vtkImageData *imageData, bool _2d) :
   viewer(nullptr)
 {
@@ -61,14 +58,6 @@ vtk_off_screen_volume_rendering_facade::vtk_off_screen_volume_rendering_facade(v
 
 vtk_off_screen_volume_rendering_facade::~vtk_off_screen_volume_rendering_facade()
 {
-  // if(this->volumeViewer)
-  // {
-  //   this->volumeViewer->Delete();
-  // }
-  // if(this->imageViewer2)
-  // {
-  //   this->imageViewer2->Delete();
-  // }
   this->viewer->Delete();
 }
 
